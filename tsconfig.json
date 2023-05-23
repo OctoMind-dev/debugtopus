@@ -10,12 +10,10 @@
   },
   "exclude": ["node_modules"],
   "include": [
-    "next-env.d.ts",
     "**/*.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "**/*.js"
   ]
 }
