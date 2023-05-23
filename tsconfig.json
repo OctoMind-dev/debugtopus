@@ -2,18 +2,12 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
-    "outDir": "./lib",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true
   },
   "exclude": ["node_modules"],
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.mjs",
-  ]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }

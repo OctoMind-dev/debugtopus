@@ -11,9 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  SKIP_ENV_VALIDATION: 1
-
 jobs:
   eslint:
     name: 'Linting'
@@ -69,8 +66,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-
-        # since the cache will sometimes delete the browsers we cannot rely on it here
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - run: pnpm i
 
