@@ -1,0 +1,38 @@
+{
+  "name": "@octomind/debugtopus",
+  "version": "1.0.0",
+  "private": true,
+  "main": "lib/main.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "tsc",
+    "run": "npx ts-node src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OctoMind-dev/debugtopus.git"
+  },
+  "author": "OctoMind-dev",
+  "license": "MIT",
+  "dependencies": {
+    "@playwright/test": "^1.33.0",
+    "commander": "^10.0.1",
+    "ngrok": "5.0.0-beta.2",
+    "node-fetch": "^3.3.1",
+    "playwright": "^1.33.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.3",
+    "@typescript-eslint/parser": "^5.59.2",
+    "@vercel/ncc": "^0.36.1",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-github": "^4.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4",
+    "ts-node": "^10.9.1"
+  }
+}
