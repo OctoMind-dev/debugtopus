@@ -15,6 +15,7 @@
   },
   "author": "OctoMind-dev",
   "license": "MIT",
+  "bin": "src/main.ts",
   "dependencies": {
     "commander": "^10.0.1",
     "ngrok": "5.0.0-beta.2",
