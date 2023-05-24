@@ -1,13 +1,18 @@
 {
+  "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "noImplicitAny": true,
-    "esModuleInterop": true
+    "types": [
+      "jest"
+    ],
+    "outDir": "dist"
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
