@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {chromium} from 'playwright'
 import ngrok from 'ngrok'
 import {Command} from 'commander'
