@@ -1,0 +1,17 @@
+{
+  "plugins": ["@typescript-eslint", "jest", "prettier"],
+  "extends": ["plugin:github/recommended", "plugin:prettier/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "@typescript-eslint/no-floating-promises": "warn",
+    "prettier/prettier": "warn",
+    "no-console": "warn"
+  }
+}
