@@ -70,5 +70,4 @@ jobs:
           cache-dependency-path: "pnpm-lock.yaml"
 
       - run: pnpm i
-      - run: npx playwright install
       - run: pnpm test
