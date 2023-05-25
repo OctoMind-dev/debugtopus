@@ -9,7 +9,7 @@ const killEntireProcessGroup = (child: ChildProcess): void => {
 
 describe("debugtopus", () => {
   it("can connect chromium to a running debugtopus instance", async () => {
-    const child = spawn("pnpm start --port=4444", {
+    const child = spawn("pnpm start --port=3000", {
       shell: true,
       detached: true,
     });
@@ -19,7 +19,7 @@ describe("debugtopus", () => {
     //don't leave hanging process in failure cases
     const timer = setTimeout(() => {
       killEntireProcessGroup(child);
-    }, 100_000);
+    }, 10_000);
 
     for await (const data of child.stdout) {
       const regex = /"(?<url>wss:\/\/.*)"/;
