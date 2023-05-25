@@ -16,3 +16,4 @@ $ npx debugtopus --port=<port>
 ```
 
 Will output `you can pass "wss://<some-url>" as the wsEndpoint in order to run automagically against your local environment`
+
