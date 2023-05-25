@@ -25,12 +25,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "pnpm-lock.yaml"
+          cache: "npm"
 
-      - run: pnpm i
-
-      - run: pnpm lint
+      - run: npm i
+      - run: npm run lint
 
   build:
     name: "Build"
@@ -46,12 +44,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "pnpm-lock.yaml"
+          cache: "npm"
 
       - run: pnpm i
-
-      - run: pnpm build
+      - run: npm run build
 
   tests:
     name: "Tests"
@@ -66,11 +62,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "pnpm"
-          cache-dependency-path: "pnpm-lock.yaml"
+          cache: "npm"
 
-      - run: pnpm i
+      - run: npm i
       - run: npx playwright install
 
         # xvfb-run needed to run virtual X-server for browser in CI context
-      - run: xvfb-run pnpm test
+      - run: xvfb-run npm run test
