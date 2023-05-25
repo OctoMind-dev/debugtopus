@@ -1,18 +1,9 @@
 {
   "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
-    "types": [
-      "jest"
-    ],
+    "types": ["jest"],
     "outDir": "dist"
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "exclude": ["node_modules", "dist"],
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }

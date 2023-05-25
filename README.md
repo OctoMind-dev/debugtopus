@@ -12,7 +12,7 @@ npm i @octomind/debugtopus
 Typing the following, where `port` defaults to `8888`:
 
 ```shell
-$ npx debugtopus --port=<port>
+npx debugtopus --port=<port>
 ```
 
 Will output `you can pass "wss://<some-url>" as the wsEndpoint in order to run automagically against your local environment`
