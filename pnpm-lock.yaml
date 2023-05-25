@@ -1,15 +1,15 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@playwright/test':
+    specifier: ^1.34.3
+    version: 1.34.3
   commander:
     specifier: ^10.0.1
     version: 10.0.1
   ngrok:
     specifier: 5.0.0-beta.2
     version: 5.0.0-beta.2
-  playwright:
-    specifier: ^1.34.1
-    version: 1.34.1
 
 devDependencies:
   '@tsconfig/node-lts':
@@ -990,6 +990,17 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@playwright/test@1.34.3:
+    resolution: {integrity: sha512-zPLef6w9P6T/iT6XDYG3mvGOqOyb6eHaV9XtkunYs0+OzxBtrPAAaHotc0X+PJ00WPPnLfFBTl7mf45Mn8DBmw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.16.3
+      playwright-core: 1.34.3
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
 
   /@sinclair/typebox@0.25.24:
     resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
@@ -2518,7 +2529,6 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /function-bind@1.1.1:
@@ -3879,19 +3889,10 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /playwright-core@1.34.1:
-    resolution: {integrity: sha512-4Y5hGLoSrnB/BXj2NFKBNWP/bI9uVejTVbso1ZBtkKZ+O2KiVIeCJ3R4c7Cf2PbP7htjLolHXY+mImt2IWOlEg==}
+  /playwright-core@1.34.3:
+    resolution: {integrity: sha512-2pWd6G7OHKemc5x1r1rp8aQcpvDh7goMBZlJv6Co5vCNLVcQJdhxRL09SGaY6HcyHH9aT4tiynZabMofVasBYw==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: false
-
-  /playwright@1.34.1:
-    resolution: {integrity: sha512-RonTwQifzkCZHsjZKYUKsOJkQAVe1HArnyLcSRrkyDxN46Ytpwki5XzQFdpuv0XD8WtAjs4gI3oMYJiEj5Qo6g==}
-    engines: {node: '>=14'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      playwright-core: 1.34.1
     dev: false
 
   /prelude-ls@1.2.1:

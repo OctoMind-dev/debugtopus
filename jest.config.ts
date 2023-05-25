@@ -1,13 +1,13 @@
-import type jest from 'jest'
+import type jest from "jest";
 
 const jestConfig: jest.Config = {
-  preset: 'ts-jest',
+  preset: "ts-jest",
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testMatch: ['**/*.spec.ts'],
-  testPathIgnorePatterns: ['dist', 'node_modules']
-}
+  testMatch: ["**/*.spec.ts"],
+  testPathIgnorePatterns: ["dist", "node_modules"],
+};
 
 // noinspection JSUnusedGlobalSymbols
-export default jestConfig
+export default jestConfig;

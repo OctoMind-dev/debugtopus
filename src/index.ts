@@ -1,4 +1,4 @@
 #! /usr/bin/env node
-import {debugtopus} from './debugtopus'
+import { debugtopus } from "./debugtopus";
 
-await debugtopus()
+await debugtopus();
