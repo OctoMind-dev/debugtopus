@@ -7,7 +7,7 @@ const jestConfig: jest.Config = {
   },
   testMatch: ["**/*.spec.ts"],
   testPathIgnorePatterns: ["dist", "node_modules"],
-  testTimeout: 10_000,
+  testTimeout: 20_000,
 };
 
 // noinspection JSUnusedGlobalSymbols
