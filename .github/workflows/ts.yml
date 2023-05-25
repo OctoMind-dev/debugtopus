@@ -71,4 +71,6 @@ jobs:
 
       - run: pnpm i
       - run: npx playwright install
+
+        # xvfb-run needed to run virtual X-server for browser in CI context
       - run: xvfb-run pnpm test
