@@ -1,6 +1,11 @@
-import {spawn} from 'child_process'
+import {ChildProcess, spawn} from 'child_process'
 import {chromium} from 'playwright'
-import { clearTimeout } from "timers";
+import {clearTimeout} from 'timers'
+
+const killEntireProcessGroup = (child: ChildProcess): void => {
+  // kill the entire process group (-pid) to kill the shell as well
+  process.kill(-child.pid!)
+}
 
 describe('debugtopus', () => {
   it('can connect chromium to a running debugtopus instance', async () => {
@@ -13,7 +18,7 @@ describe('debugtopus', () => {
 
     //dont leave hanging process in failure cases
     const timer = setTimeout(() => {
-      process.kill(-child.pid!)
+      killEntireProcessGroup(child)
     }, 3000)
 
     for await (const data of child.stdout) {
@@ -24,14 +29,14 @@ describe('debugtopus', () => {
       if (match) {
         url = match.groups?.['url']
         await expect(chromium.connect(url!)).resolves.toBeTruthy()
-        // kill the entire process group (-pid) to kill the shell as well
-        process.kill(-child.pid!)
+
+        killEntireProcessGroup(child)
       }
     }
 
     //ensure that match branch was invoked
     expect.assertions(1)
 
-    clearTimeout(timer);
+    clearTimeout(timer)
   })
 })

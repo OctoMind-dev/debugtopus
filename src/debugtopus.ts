@@ -30,6 +30,6 @@ export const debugtopus = async (): Promise<void> => {
 
   // eslint-disable-next-line no-console
   console.log(
-    `you can pass "${reverseProxyPlaywrightWsEndpoint}" as the wsEndpoint to /execute in order to run automagically against your local environment`
+    `you can pass "${reverseProxyPlaywrightWsEndpoint}" as the wsEndpoint in order to run automagically against your local environment`
   )
 }
