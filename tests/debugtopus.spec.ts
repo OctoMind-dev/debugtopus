@@ -23,7 +23,6 @@ describe("debugtopus", () => {
 
     for await (const data of child.stdout) {
       const regex = /"(?<url>wss:\/\/.*)"/;
-      console.log(data.toString());
 
       const match = data.toString().match(regex);
 

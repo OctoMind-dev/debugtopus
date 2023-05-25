@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'src/**'
+      - "src/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   eslint:
-    name: 'Linting'
+    name: "Linting"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,15 +25,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - run: pnpm i
 
       - run: pnpm lint
 
   build:
-    name: 'Build'
+    name: "Build"
     runs-on: ubuntu-latest
 
     steps:
@@ -46,15 +46,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - run: pnpm i
 
       - run: pnpm build
 
   tests:
-    name: 'Tests'
+    name: "Tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -66,9 +66,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - run: pnpm i
-
+      - run: npx playwright install
       - run: pnpm test
