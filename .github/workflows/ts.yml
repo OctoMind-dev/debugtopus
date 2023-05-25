@@ -71,4 +71,4 @@ jobs:
 
       - run: pnpm i
       - run: npx playwright install
-      - run: xvfb-run pnpm start
+      - run: pnpm test

@@ -9,7 +9,7 @@ const killEntireProcessGroup = (child: ChildProcess): void => {
 
 describe("debugtopus", () => {
   it("can connect chromium to a running debugtopus instance", async () => {
-    const child = spawn("pnpm start --port=3000", {
+    const child = spawn("xvfb-run pnpm start --port=3000", {
       shell: true,
       detached: true,
     });
