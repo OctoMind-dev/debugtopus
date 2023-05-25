@@ -2,15 +2,17 @@
   "name": "@octomind/debugtopus",
   "version": "1.0.0",
   "description": "thin wrapper around ngrok and playwright to run your automagically-maintained tests locally",
-  "main": "dist/index.js",
-  "type": "module",
+  "main": "./dist/index.js",
+  "type": "commonjs",
   "files": [
     "dist",
-    "README.md"
+    "src",
+    "README.md",
+    "package.json"
   ],
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "start": "npx tsx src/index.ts",
     "test": "jest --ci"
   },
@@ -21,7 +23,7 @@
   "author": "OctoMind-dev",
   "license": "MIT",
   "bin": {
-    "debugtopus": "dist/index.js"
+    "debugtopus": "./dist/index.js"
   },
   "dependencies": {
     "commander": "^10.0.1",

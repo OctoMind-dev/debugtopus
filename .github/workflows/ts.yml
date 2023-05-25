@@ -25,10 +25,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm"
+          cache: "pnpm"
 
-      - run: npm i
-      - run: npm run lint
+      - run: pnpm i
+      - run: pnpm lint
 
   build:
     name: "Build"
@@ -44,10 +44,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm"
+          cache: "pnpm"
 
       - run: pnpm i
-      - run: npm run build
+      - run: pnpm build
 
   tests:
     name: "Tests"
@@ -62,10 +62,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm"
+          cache: "pnpm"
 
-      - run: npm i
+      - run: pnpm i
       - run: npx playwright install
 
         # xvfb-run needed to run virtual X-server for browser in CI context
-      - run: xvfb-run npm run test
+      - run: xvfb-run pnpm test
