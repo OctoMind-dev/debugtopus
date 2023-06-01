@@ -26,9 +26,11 @@
     "debugtopus": "./dist/index.js"
   },
   "dependencies": {
+    "@playwright/test": "^1.34.3",
+    "@types/tmp": "^0.2.3",
+    "axios": "^1.4.0",
     "commander": "^10.0.1",
-    "ngrok": "5.0.0-beta.2",
-    "@playwright/test": "^1.34.3"
+    "tmp": "^0.2.1"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "^18.12.2",
