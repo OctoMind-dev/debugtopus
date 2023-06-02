@@ -51,7 +51,7 @@ export const debugtopus = async (): Promise<void> => {
   const configFileName = path.join(tempDir.name, `${randomUUID()}.config.ts`);
   writeFileSync(configFileName, getConfig(options.localEnvironmentUrl));
 
-  const command = `npx playwright test --ui --config=${configFileName} ${testFileName}`;
+  const command = `npx playwright test --config=${configFileName} ${testFileName}`;
 
   const { stdout, stderr } = await promisify(exec)(command);
   // eslint-disable-next-line no-console
