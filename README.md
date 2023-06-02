@@ -9,10 +9,8 @@ npm i @octomind/debugtopus
 ```
 
 ## Usage
-Typing the following, where `port` defaults to `8888`:
+You should get the base command including id and token from octomind. You should just add the url of the app you would like to run the test against:
 
 ```shell
-npx debugtopus --port=<port>
+npx debugtopus --id=<test-case-id> --token <token> --url local-url
 ```
-
-Will output `you can pass "wss://<some-url>" as the wsEndpoint in order to run automagically against your local environment`

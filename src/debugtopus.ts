@@ -1,10 +1,12 @@
 import { Command } from "commander";
 import { getPlaywrightCode } from "./octomind-api";
 
-import { fileSync } from "tmp";
+import { dirSync } from "tmp";
 import { writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
+import { randomUUID } from "crypto";
+import path from "path";
 
 const getConfig = (url) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -33,20 +35,23 @@ export const debugtopus = async (): Promise<void> => {
       "token to authenticate against octomind api"
     )
     .requiredOption("-i, --id <uuid>", "id of the test case you want to run")
-    .argument("<url>", "url the tests should run against")
+    .requiredOption("-u, --url <url>", "url the tests should run against")
     .parse(process.argv);
 
   const options = program.opts();
 
-  const code = await getPlaywrightCode(options.id, options.token);
+  const code = await getPlaywrightCode(options.id, options.token, options.url);
 
-  const testFile = fileSync();
-  writeFileSync(testFile.name, code);
+  const tempDir = dirSync();
+  // const testFile = fileSync({ name: `${randomUUID()}.spec.ts` });
+  const testFileName = path.join(tempDir.name, `${randomUUID()}.spec.ts`);
+  writeFileSync(testFileName, code);
 
-  const configFile = fileSync();
-  writeFileSync(configFile.name, getConfig(options.localEnvironmentUrl));
+  // const configFile = fileSync({ name: `${randomUUID()}.config.ts` });
+  const configFileName = path.join(tempDir.name, `${randomUUID()}.config.ts`);
+  writeFileSync(configFileName, getConfig(options.localEnvironmentUrl));
 
-  const command = `npx playwright test --config=${configFile.name} ${testFile.name}`;
+  const command = `npx playwright test --ui --config=${configFileName} ${testFileName}`;
 
   const { stdout, stderr } = await promisify(exec)(command);
   // eslint-disable-next-line no-console
