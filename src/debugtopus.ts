@@ -1,12 +1,12 @@
 import { Command } from "commander";
-import { getPlaywrightCode } from "./octomind-api";
-
 import { dirSync } from "tmp";
 import { writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path from "path";
+
+import { getPlaywrightCode } from "./octomind-api";
 
 const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
