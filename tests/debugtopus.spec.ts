@@ -30,7 +30,7 @@ describe("prepareTestRun", () => {
     expect(configFileContent).toEqual(getConfig(url, outputDir));
 
     expect(axios.get).toHaveBeenCalledWith(
-      `http://localhost:3000/api/v1/test-cases/${testId}/code?url=${encodeURI(
+      `https://app.octomind.dev/api/v1/test-cases/${testId}/code?executionUrl=${encodeURI(
         url
       )}`,
       {
