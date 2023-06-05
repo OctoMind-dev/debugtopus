@@ -8,7 +8,7 @@ import path from "path";
 
 import { getPlaywrightCode } from "./octomind-api";
 
-const getConfig = (url: string, outputDir: string) => `
+export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
 
 // noinspection JSUnusedGlobalSymbols
@@ -26,6 +26,32 @@ export default defineConfig({
 });
 `;
 
+export const prepareTestRun = async ({
+  token,
+  url,
+  testId,
+}: {
+  token: string;
+  url: string;
+  testId: string;
+}): Promise<{
+  configFilePath: string;
+  testFilePath: string;
+  outputDir: string;
+}> => {
+  const code = await getPlaywrightCode(testId, token, url);
+
+  const tempDir = dirSync();
+  const testFilePath = path.join(tempDir.name, `${randomUUID()}.spec.ts`);
+  writeFileSync(testFilePath, code);
+
+  const configFilePath = path.join(tempDir.name, `${randomUUID()}.config.ts`);
+  const outputDir = dirSync();
+  writeFileSync(configFilePath, getConfig(url, outputDir.name));
+
+  return { testFilePath, configFilePath, outputDir: outputDir.name };
+};
+
 export const debugtopus = async (): Promise<void> => {
   const program = new Command();
 
@@ -40,25 +66,18 @@ export const debugtopus = async (): Promise<void> => {
 
   const options = program.opts();
 
-  const code = await getPlaywrightCode(options.id, options.token, options.url);
+  const { configFilePath, testFilePath, outputDir } = await prepareTestRun({
+    testId: options.id,
+    token: options.token,
+    url: options.url,
+  });
 
-  const tempDir = dirSync();
-  const testFileName = path.join(tempDir.name, `${randomUUID()}.spec.ts`);
-  writeFileSync(testFileName, code);
-
-  const configFileName = path.join(tempDir.name, `${randomUUID()}.config.ts`);
-  const outputDir = dirSync();
-  writeFileSync(
-    configFileName,
-    getConfig(options.localEnvironmentUrl, outputDir.name)
-  );
-
-  const command = `npx playwright test --ui --config=${configFileName} ${testFileName}`;
+  const command = `npx playwright test --ui --config=${configFilePath} ${testFilePath}`;
 
   const { stderr } = await promisify(exec)(command);
   if (stderr) {
     console.error(stderr);
   } else {
-    console.log(`success, you can find your artifacts at ${outputDir.name}`);
+    console.log(`success, you can find your artifacts at ${outputDir}`);
   }
 };
