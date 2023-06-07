@@ -1,42 +1,41 @@
-import { ChildProcess, spawn } from "child_process";
-import { chromium } from "@playwright/test";
-import { clearTimeout } from "timers";
+import axios from "axios";
+import { getConfig, prepareTestRun } from "../src/debugtopus";
+import { readFileSync } from "fs";
 
-const killEntireProcessGroup = (child: ChildProcess): void => {
-  // kill the entire process group (-pid) to kill the shell as well
-  process.kill(-child.pid!);
-};
+jest.mock("axios");
 
-describe("debugtopus", () => {
-  it("can connect chromium to a running debugtopus instance", async () => {
-    const child = spawn("pnpm start --port=3000", {
-      shell: true,
-      detached: true,
+describe("prepareTestRun", () => {
+  const testCode = "this is the test code";
+  const url = "https://foo.bar";
+  const testId = "testId";
+  const token = "token";
+  beforeEach(() => {
+    (axios.get as jest.Mock).mockResolvedValue({
+      data: { testCode },
     });
+  });
 
-    let url: string | undefined = undefined;
+  it("generates the correct files", async () => {
+    const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
+      token,
+      testId,
+      url,
+    });
+    const testFileContent = readFileSync(testFilePath, { encoding: "utf-8" });
+    expect(testFileContent).toEqual(testCode);
 
-    //don't leave hanging process in failure cases
-    const timer = setTimeout(() => {
-      killEntireProcessGroup(child);
-    }, 20_000);
+    const configFileContent = readFileSync(configFilePath, {
+      encoding: "utf-8",
+    });
+    expect(configFileContent).toEqual(getConfig(url, outputDir));
 
-    for await (const data of child.stdout) {
-      const regex = /"(?<url>wss:\/\/.*)"/;
-
-      const match = data.toString().match(regex);
-
-      if (match) {
-        url = match.groups?.["url"];
-        await expect(chromium.connect(url!)).resolves.toBeTruthy();
-
-        killEntireProcessGroup(child);
+    expect(axios.get).toHaveBeenCalledWith(
+      `https://app.octomind.dev/api/v1/test-cases/${testId}/code?executionUrl=${encodeURI(
+        url
+      )}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
-    }
-
-    //ensure that match branch was invoked
-    expect.assertions(1);
-
-    clearTimeout(timer);
+    );
   });
 });
