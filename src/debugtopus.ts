@@ -30,16 +30,18 @@ export const prepareTestRun = async ({
   token,
   url,
   testId,
+  octomindUrl,
 }: {
   token: string;
   url: string;
   testId: string;
+  octomindUrl: string;
 }): Promise<{
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
 }> => {
-  const code = await getPlaywrightCode(testId, token, url);
+  const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
   const tempDir = dirSync();
   const testFilePath = path.join(tempDir.name, `${randomUUID()}.spec.ts`);
@@ -62,6 +64,11 @@ export const debugtopus = async (): Promise<void> => {
     )
     .requiredOption("-i, --id <uuid>", "id of the test case you want to run")
     .requiredOption("-u, --url <url>", "url the tests should run against")
+    .option(
+      "-o, --octomindUrl <url>",
+      "base url of the octomind api",
+      "https://app.octomind.dev"
+    )
     .parse(process.argv);
 
   const options = program.opts();
@@ -70,6 +77,7 @@ export const debugtopus = async (): Promise<void> => {
     testId: options.id,
     token: options.token,
     url: options.url,
+    octomindUrl: options.octomindUrl,
   });
 
   const command = `npx playwright test --ui --config=${configFilePath} ${testFilePath}`;

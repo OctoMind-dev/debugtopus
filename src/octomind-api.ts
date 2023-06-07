@@ -3,9 +3,10 @@ import axios, { AxiosError } from "axios";
 export const getPlaywrightCode = async (
   testCaseId: string,
   token: string,
-  url: string
+  url: string,
+  octomindUrl: string
 ): Promise<string> => {
-  const endpoint = `https://app.octomind.dev/api/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
+  const endpoint = `${octomindUrl}/api/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
     url
   )}`;
   try {
