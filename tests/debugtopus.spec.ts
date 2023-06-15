@@ -1,22 +1,29 @@
 import axios from "axios";
 import { getConfig, prepareTestRun } from "../src/debugtopus";
 import { readFileSync } from "fs";
+import fs from "fs/promises";
 
 jest.mock("axios");
 
 describe("prepareTestRun", () => {
-  const testCode = "this is the test code";
+  const testCode = "";
   const url = "https://foo.bar";
   const testId = "testId";
   const token = "token";
+  const octomindUrl = "https://app.octomind.dev";
   beforeEach(() => {
     (axios.get as jest.Mock).mockResolvedValue({
       data: { testCode },
     });
   });
 
+  afterEach(async () => {
+    await fs.rm("temp", { recursive: true });
+  });
+
   it("generates the correct files", async () => {
     const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
+      octomindUrl,
       token,
       testId,
       url,

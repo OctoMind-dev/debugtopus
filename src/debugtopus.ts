@@ -1,6 +1,5 @@
 import { Command } from "commander";
-import { dirSync } from "tmp";
-import { writeFileSync } from "fs";
+import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
@@ -43,15 +42,19 @@ export const prepareTestRun = async ({
 }> => {
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
-  const tempDir = dirSync();
-  const testFilePath = path.join(tempDir.name, `${randomUUID()}.spec.ts`);
+  const dirname = __dirname;
+  const tempDir = path.join(dirname, "..", "temp");
+  const outputDir = "output";
+  if (!existsSync(tempDir)) {
+    mkdirSync(tempDir);
+  }
+  const testFilePath = path.join(tempDir, `${randomUUID()}.spec.ts`);
   writeFileSync(testFilePath, code);
 
-  const configFilePath = path.join(tempDir.name, `${randomUUID()}.config.ts`);
-  const outputDir = dirSync();
-  writeFileSync(configFilePath, getConfig(url, outputDir.name));
+  const configFilePath = path.join(tempDir, `${randomUUID()}.config.ts`);
+  writeFileSync(configFilePath, getConfig(url, outputDir));
 
-  return { testFilePath, configFilePath, outputDir: outputDir.name };
+  return { testFilePath, configFilePath, outputDir };
 };
 
 export const debugtopus = async (): Promise<void> => {
