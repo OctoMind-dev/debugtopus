@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
@@ -43,7 +43,11 @@ export const prepareTestRun = async ({
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
   const dirname = __dirname;
-  const tempDir = path.join(dirname, "..", "temp");
+  let tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
+  if (process.env.NODE_ENV === "test") {
+    tempDir = path.join(dirname, "..", "temp");
+  }
+
   const outputDir = "output";
   if (!existsSync(tempDir)) {
     mkdirSync(tempDir);
