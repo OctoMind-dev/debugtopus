@@ -43,7 +43,7 @@ export const prepareTestRun = async ({
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
   const dirname = __dirname;
-  const tempDir = path.join(dirname, "..", "temp");
+  const tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
   const outputDir = "output";
   if (!existsSync(tempDir)) {
     mkdirSync(tempDir);
