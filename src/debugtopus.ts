@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import path from "path";
 
 import { getPlaywrightCode } from "./octomind-api";
+import * as process from "process";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -43,7 +44,11 @@ export const prepareTestRun = async ({
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
   const dirname = __dirname;
-  const tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
+  let tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
+  if (process.env.NODE_ENV === "test") {
+    tempDir = path.join(dirname, "..", "temp");
+  }
+
   const outputDir = "output";
   if (!existsSync(tempDir)) {
     mkdirSync(tempDir);
