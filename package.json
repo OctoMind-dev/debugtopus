@@ -1,6 +1,6 @@
 {
   "name": "@octomind/debugtopus",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "thin wrapper around ngrok and playwright to run your automagically-maintained tests locally",
   "main": "./dist/index.js",
   "type": "commonjs",
