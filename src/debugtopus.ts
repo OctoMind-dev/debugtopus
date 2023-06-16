@@ -24,17 +24,17 @@ export default defineConfig({
 });
 `;
 
-const getTempDirOnPackageRootLevel = (inputDir: string): string => {
+const getTempDirOnPackageRootLevel = (appDir: string): string => {
   let infiniteLoopPrevention = 5;
-  let appDir = inputDir;
+  let rootDir = appDir;
 
   while (infiniteLoopPrevention > 0) {
-    const nodeDir = path.join(appDir, "node_modules");
+    const nodeDir = path.join(rootDir, "node_modules");
     if (existsSync(nodeDir)) {
       break;
     }
-    appDir = path.join(appDir, "..");
 
+    rootDir = path.join(rootDir, "..");
     infiniteLoopPrevention -= 1;
   }
 
@@ -42,8 +42,7 @@ const getTempDirOnPackageRootLevel = (inputDir: string): string => {
     throw new Error("can't find root level node modules :/");
   }
 
-  const tempDir = path.join(appDir, "temp");
-  return tempDir;
+  return path.join(rootDir, "temp");
 };
 
 export const prepareTestRun = async ({
