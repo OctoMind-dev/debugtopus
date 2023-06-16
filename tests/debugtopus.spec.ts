@@ -1,9 +1,18 @@
 import axios from "axios";
-import { getConfig, prepareTestRun } from "../src/debugtopus";
-import { readFileSync } from "fs";
+import {
+  getConfig,
+  prepareTestRun,
+  getTempDirOnPackageRootLevel,
+} from "../src/debugtopus";
+import { readFileSync, existsSync } from "fs";
 import fs from "fs/promises";
+import path from "path";
 
 jest.mock("axios");
+jest.mock("fs", () => ({
+  ...jest.requireActual("fs"),
+  existsSync: jest.fn(jest.requireActual("fs").existsSync),
+}));
 
 describe("prepareTestRun", () => {
   const testCode = "";
@@ -18,7 +27,11 @@ describe("prepareTestRun", () => {
   });
 
   afterEach(async () => {
-    await fs.rm("temp", { recursive: true });
+    try {
+      await fs.rm("temp", { recursive: true });
+    } catch (error) {
+      // we don't care
+    }
   });
 
   it("generates the correct files", async () => {
@@ -45,4 +58,40 @@ describe("prepareTestRun", () => {
       }
     );
   });
+  it.each([0, 1, 2, 3, 4])(
+    "gets root dir correctly",
+    async (numberOfLevelsToRoot) => {
+      let callCount = -1;
+      jest.mocked(existsSync).mockImplementation(() => {
+        callCount++;
+        return callCount === numberOfLevelsToRoot;
+      });
+
+      const appDir = "someDir";
+      const dir = getTempDirOnPackageRootLevel(appDir);
+      const levelUps = Array(numberOfLevelsToRoot)
+        .fill("")
+        .map(() => "..");
+
+      const expectedDir = path.join(appDir, ...levelUps, "temp");
+      expect(dir).toEqual(expectedDir);
+    }
+  );
+
+  it.each([5, 6, 10, 100])(
+    "raises error when %s levels",
+    async (numberOfLevelsToRoot) => {
+      let callCount = -1;
+      jest.mocked(existsSync).mockImplementation(() => {
+        callCount++;
+        return callCount === numberOfLevelsToRoot;
+      });
+
+      const appDir = "someDir";
+
+      expect(() => getTempDirOnPackageRootLevel(appDir)).toThrowError(
+        "can't find root level node modules"
+      );
+    }
+  );
 });

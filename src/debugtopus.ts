@@ -24,7 +24,7 @@ export default defineConfig({
 });
 `;
 
-const getTempDirOnPackageRootLevel = (appDir: string): string => {
+export const getTempDirOnPackageRootLevel = (appDir: string): string => {
   let infiniteLoopPrevention = 5;
   let rootDir = appDir;
 
@@ -39,7 +39,7 @@ const getTempDirOnPackageRootLevel = (appDir: string): string => {
   }
 
   if (infiniteLoopPrevention === 0) {
-    throw new Error("can't find root level node modules :/");
+    throw new Error("can't find root level node modules");
   }
 
   return path.join(rootDir, "temp");
