@@ -3,8 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
-import path from "path";
-
+import path, { dirname } from "path";
 import { getPlaywrightCode } from "./octomind-api";
 
 export const getConfig = (url: string, outputDir: string) => `
@@ -25,6 +24,27 @@ export default defineConfig({
 });
 `;
 
+export const getTempDirOnPackageRootLevel = (appDir: string): string => {
+  let infiniteLoopPrevention = 5;
+  let rootDir = appDir;
+
+  while (infiniteLoopPrevention > 0) {
+    const nodeDir = path.join(rootDir, "node_modules");
+    if (existsSync(nodeDir)) {
+      break;
+    }
+
+    rootDir = path.join(rootDir, "..");
+    infiniteLoopPrevention -= 1;
+  }
+
+  if (infiniteLoopPrevention === 0) {
+    throw new Error("can't find root level node modules");
+  }
+
+  return path.join(rootDir, "temp");
+};
+
 export const prepareTestRun = async ({
   token,
   url,
@@ -42,13 +62,14 @@ export const prepareTestRun = async ({
 }> => {
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
-  const dirname = __dirname;
-  let tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
-  if (process.env.NODE_ENV === "test") {
-    tempDir = path.join(dirname, "..", "temp");
+  const nodeModule = require.main;
+  if (!nodeModule) {
+    throw new Error("package was not installed as valid nodeJS module");
   }
-
+  const appDir = dirname(nodeModule.filename);
+  const tempDir = getTempDirOnPackageRootLevel(appDir);
   const outputDir = "output";
+
   if (!existsSync(tempDir)) {
     mkdirSync(tempDir);
   }
