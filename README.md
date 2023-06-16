@@ -24,7 +24,7 @@ You should just add the url of the app you would like to run the test against:
 ```shell
 npx @octomind/debugtopus --id <test-case-id> --token <token> --url <local-url>
 ```
-You can also use specific version:
+You can also use a specific version:
 ```shell
  npx --package @octomind/debugtopus@<some-version> debugtopus --id <test-case-id> --token <token> --url <local-url>
 ```
