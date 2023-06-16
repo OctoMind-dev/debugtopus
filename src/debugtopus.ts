@@ -4,8 +4,9 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path from "path";
-
 import { getPlaywrightCode } from "./octomind-api";
+// eslint-disable-next-line import/no-commonjs
+const { dirname } = require("path");
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -42,11 +43,9 @@ export const prepareTestRun = async ({
 }> => {
   const code = await getPlaywrightCode(testId, token, url, octomindUrl);
 
-  const dirname = __dirname;
-  let tempDir = path.join(dirname, "..", "..", "..", "..", "temp");
-  if (process.env.NODE_ENV === "test") {
-    tempDir = path.join(dirname, "..", "temp");
-  }
+  // @ts-ignore
+  const appDir = dirname(require.main.filename);
+  const tempDir = path.join(appDir, "..", "temp");
 
   const outputDir = "output";
   if (!existsSync(tempDir)) {
