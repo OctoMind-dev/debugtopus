@@ -1,9 +1,10 @@
 import { Command } from "commander";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
+import { dirSync } from "tmp";
 import { getPlaywrightCode } from "./octomind-api";
 
 export const getConfig = (url: string, outputDir: string) => `
@@ -24,7 +25,7 @@ export default defineConfig({
 });
 `;
 
-export const getTempDirOnPackageRootLevel = (appDir: string): string => {
+export const getPackageRootLevel = (appDir: string): string => {
   let infiniteLoopPrevention = 5;
   let rootDir = appDir;
 
@@ -42,37 +43,23 @@ export const getTempDirOnPackageRootLevel = (appDir: string): string => {
     throw new Error("can't find root level node modules");
   }
 
-  return path.join(rootDir, "temp");
+  return rootDir;
 };
 
 export const prepareTestRun = async ({
-  token,
   url,
-  testId,
-  octomindUrl,
+  code,
 }: {
-  token: string;
   url: string;
-  testId: string;
-  octomindUrl: string;
+  code: string;
 }): Promise<{
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
 }> => {
-  const code = await getPlaywrightCode(testId, token, url, octomindUrl);
+  const tempDir = dirSync().name;
+  const outputDir = path.join(tempDir, "output");
 
-  const nodeModule = require.main;
-  if (!nodeModule) {
-    throw new Error("package was not installed as valid nodeJS module");
-  }
-  const appDir = dirname(nodeModule.filename);
-  const tempDir = getTempDirOnPackageRootLevel(appDir);
-  const outputDir = "output";
-
-  if (!existsSync(tempDir)) {
-    mkdirSync(tempDir);
-  }
   const testFilePath = path.join(tempDir, `${randomUUID()}.spec.ts`);
   writeFileSync(testFilePath, code);
 
@@ -80,6 +67,35 @@ export const prepareTestRun = async ({
   writeFileSync(configFilePath, getConfig(url, outputDir));
 
   return { testFilePath, configFilePath, outputDir };
+};
+
+export const runTest = async ({
+  configFilePath,
+  testFilePath,
+  outputDir,
+}: {
+  configFilePath: string;
+  testFilePath: string;
+  outputDir: string;
+}): Promise<void> => {
+  const command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+
+  const nodeModule = require.main;
+  if (!nodeModule) {
+    throw new Error("package was not installed as valid nodeJS module");
+  }
+  const appDir = dirname(nodeModule.filename);
+
+  const { stderr } = await promisify(exec)(command, {
+    cwd: getPackageRootLevel(appDir),
+  });
+
+  if (stderr) {
+    console.error(stderr);
+    process.exit(1);
+  } else {
+    console.log(`success, you can find your artifacts at ${outputDir}`);
+  }
 };
 
 export const debugtopus = async (): Promise<void> => {
@@ -101,19 +117,15 @@ export const debugtopus = async (): Promise<void> => {
 
   const options = program.opts();
 
-  const { configFilePath, testFilePath, outputDir } = await prepareTestRun({
-    testId: options.id,
-    token: options.token,
+  const testRunPreparationResults = await prepareTestRun({
     url: options.url,
-    octomindUrl: options.octomindUrl,
+    code: await getPlaywrightCode({
+      testCaseId: options.id,
+      token: options.token,
+      url: options.url,
+      octomindUrl: options.octomindUrl,
+    }),
   });
 
-  const command = `npx playwright test --ui --config=${configFilePath} ${testFilePath}`;
-
-  const { stderr } = await promisify(exec)(command);
-  if (stderr) {
-    console.error(stderr);
-  } else {
-    console.log(`success, you can find your artifacts at ${outputDir}`);
-  }
+  await runTest(testRunPreparationResults);
 };
