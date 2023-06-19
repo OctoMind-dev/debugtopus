@@ -148,5 +148,5 @@ export const debugtopus = async (): Promise<void> => {
     }),
   });
 
-  await runTest({ ...testRunPreparationResults, runMode: "headless" });
+  await runTest({ ...testRunPreparationResults, runMode: "ui" });
 };
