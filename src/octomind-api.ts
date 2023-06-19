@@ -1,11 +1,16 @@
 import axios, { AxiosError } from "axios";
 
-export const getPlaywrightCode = async (
-  testCaseId: string,
-  token: string,
-  url: string,
-  octomindUrl: string
-): Promise<string> => {
+export const getPlaywrightCode = async ({
+  testCaseId,
+  token,
+  url,
+  octomindUrl,
+}: {
+  testCaseId: string;
+  token: string;
+  url: string;
+  octomindUrl: string;
+}): Promise<string> => {
   const endpoint = `${octomindUrl}/api/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
     url
   )}`;

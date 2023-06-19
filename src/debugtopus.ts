@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
@@ -117,15 +117,15 @@ export const debugtopus = async (): Promise<void> => {
 
   const options = program.opts();
 
-  const preparationResults = await prepareTestRun({
+  const testRunPreparationResults = await prepareTestRun({
     url: options.url,
-    code: await getPlaywrightCode(
-      options.id,
-      options.token,
-      options.url,
-      options.octomindUrl
-    ),
+    code: await getPlaywrightCode({
+      testCaseId: options.id,
+      token: options.token,
+      url: options.url,
+      octomindUrl: options.octomindUrl,
+    }),
   });
 
-  await runTest(preparationResults);
+  await runTest(testRunPreparationResults);
 };
