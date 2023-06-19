@@ -60,9 +60,6 @@ export const prepareTestRun = async ({
   const tempDir = dirSync().name;
   const outputDir = path.join(tempDir, "output");
 
-  if (!existsSync(tempDir)) {
-    mkdirSync(tempDir);
-  }
   const testFilePath = path.join(tempDir, `${randomUUID()}.spec.ts`);
   writeFileSync(testFilePath, code);
 
