@@ -8,7 +8,7 @@ describe("octomind-api", () => {
   const testCaseId = "testId";
   const token = "token";
   const octomindUrl = "https://app.octomind.dev";
-  const url = "https://foo.bar";
+  const url = "https://thisIsARealUrl.com";
 
   beforeEach(() => {
     jest.mocked(axios.get).mockResolvedValue({

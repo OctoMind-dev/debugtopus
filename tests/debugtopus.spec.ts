@@ -17,7 +17,7 @@ describe("prepareTestRun", () => {
     });
   });`;
 
-  const url = "https://foo.bar";
+  const url = "https://thisIsARealUrl.com";
 
   it("generates the correct files", async () => {
     const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
