@@ -29,7 +29,7 @@ test.describe("test execution", () => {
       packageRootDir,
     });
 
-    await runTest(preparationResults);
+    await runTest({ ...preparationResults, runMode: "headless" });
   });
 
   test("it can execute playwright from an arbitrary folder", async () => {
@@ -42,6 +42,6 @@ test.describe("test execution", () => {
       packageRootDir,
     });
 
-    await runTest(preparationResults);
+    await runTest({ ...preparationResults, runMode: "headless" });
   });
 });

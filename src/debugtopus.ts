@@ -92,17 +92,27 @@ export const runTest = async ({
   configFilePath,
   testFilePath,
   outputDir,
-  packageRootDir,
+  runMode,
 }: {
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
-  packageRootDir: string;
+  runMode: "ui" | "headless";
 }): Promise<void> => {
-  const command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+  let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+
+  if (runMode === "ui") {
+    command += "--ui";
+  }
+
+  const nodeModule = require.main;
+  if (!nodeModule) {
+    throw new Error("package was not installed as valid nodeJS module");
+  }
+  const appDir = dirname(nodeModule.filename);
 
   const { stderr } = await promisify(exec)(command, {
-    cwd: packageRootDir,
+    cwd: getPackageRootLevel(appDir),
   });
 
   if (stderr) {
@@ -142,5 +152,5 @@ export const debugtopus = async (): Promise<void> => {
     }),
   });
 
-  await runTest(testRunPreparationResults);
+  await runTest({ ...testRunPreparationResults, runMode: "headless" });
 };
