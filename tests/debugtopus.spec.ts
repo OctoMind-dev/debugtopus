@@ -1,30 +1,23 @@
-import axios from "axios";
-import {
-  getConfig,
-  prepareTestRun,
-  getTempDirOnPackageRootLevel,
-} from "../src/debugtopus";
-import { readFileSync, existsSync } from "fs";
+import { getConfig, getPackageRootLevel, prepareTestRun } from "@/debugtopus";
+import { existsSync, readFileSync } from "fs";
 import fs from "fs/promises";
 import path from "path";
 
-jest.mock("axios");
 jest.mock("fs", () => ({
   ...jest.requireActual("fs"),
   existsSync: jest.fn(jest.requireActual("fs").existsSync),
 }));
 
 describe("prepareTestRun", () => {
-  const testCode = "";
-  const url = "https://foo.bar";
-  const testId = "testId";
-  const token = "token";
-  const octomindUrl = "https://app.octomind.dev";
-  beforeEach(() => {
-    (axios.get as jest.Mock).mockResolvedValue({
-      data: { testCode },
+  const testCode = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
+
+  test.describe("test description", () => {
+    test("it should be able to run playwright", () => {
+      expect(true).toBeTruthy();
     });
-  });
+  });`;
+
+  const url = "https://foo.bar";
 
   afterEach(async () => {
     try {
@@ -36,10 +29,8 @@ describe("prepareTestRun", () => {
 
   it("generates the correct files", async () => {
     const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
-      octomindUrl,
-      token,
-      testId,
       url,
+      code: testCode,
     });
     const testFileContent = readFileSync(testFilePath, { encoding: "utf-8" });
     expect(testFileContent).toEqual(testCode);
@@ -48,16 +39,8 @@ describe("prepareTestRun", () => {
       encoding: "utf-8",
     });
     expect(configFileContent).toEqual(getConfig(url, outputDir));
-
-    expect(axios.get).toHaveBeenCalledWith(
-      `https://app.octomind.dev/api/v1/test-cases/${testId}/code?executionUrl=${encodeURI(
-        url
-      )}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
   });
+
   it.each([0, 1, 2, 3, 4])(
     "gets root dir correctly",
     async (numberOfLevelsToRoot) => {
@@ -68,12 +51,12 @@ describe("prepareTestRun", () => {
       });
 
       const appDir = "someDir";
-      const dir = getTempDirOnPackageRootLevel(appDir);
+      const dir = getPackageRootLevel(appDir);
       const levelUps = Array(numberOfLevelsToRoot)
         .fill("")
         .map(() => "..");
 
-      const expectedDir = path.join(appDir, ...levelUps, "temp");
+      const expectedDir = path.join(appDir, ...levelUps);
       expect(dir).toEqual(expectedDir);
     }
   );
@@ -89,7 +72,7 @@ describe("prepareTestRun", () => {
 
       const appDir = "someDir";
 
-      expect(() => getTempDirOnPackageRootLevel(appDir)).toThrowError(
+      expect(() => getPackageRootLevel(appDir)).toThrowError(
         "can't find root level node modules"
       );
     }

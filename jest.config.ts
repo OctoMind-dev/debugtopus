@@ -5,7 +5,7 @@ const jestConfig: jest.Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testMatch: ["**/*.spec.ts"],
+  testMatch: ["**/tests/**/*.spec.ts"],
   testPathIgnorePatterns: ["dist", "node_modules"],
   testTimeout: 20_000,
 };
