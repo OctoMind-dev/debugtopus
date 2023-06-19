@@ -1,7 +1,7 @@
 import { getConfig, getPackageRootLevel, prepareTestRun } from "@/debugtopus";
 import { existsSync, readFileSync } from "fs";
-import fs from "fs/promises";
 import path from "path";
+import fs from "fs/promises";
 
 jest.mock("fs", () => ({
   ...jest.requireActual("fs"),
@@ -9,6 +9,8 @@ jest.mock("fs", () => ({
 }));
 
 describe("prepareTestRun", () => {
+  const packageRootDir = path.join(__dirname, "..");
+  const tempDir = path.join(packageRootDir, "temp");
   const testCode = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
 
   test.describe("test description", () => {
@@ -18,6 +20,14 @@ describe("prepareTestRun", () => {
   });`;
 
   const url = "https://thisIsARealUrl.com";
+
+  afterEach(async () => {
+    try {
+      await fs.rm(tempDir, { recursive: true });
+    } catch (error) {
+      // we don't care
+    }
+  });
 
   it("generates the correct files", async () => {
     const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
