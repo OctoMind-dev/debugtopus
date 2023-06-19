@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import { dirSync } from "tmp";
 import { getPlaywrightCode } from "./octomind-api";
+import fs from "fs/promises";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -49,15 +50,34 @@ export const getPackageRootLevel = (appDir: string): string => {
 export const prepareTestRun = async ({
   url,
   code,
+  packageRootDir,
 }: {
   url: string;
   code: string;
+  packageRootDir?: string;
 }): Promise<{
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
+  packageRootDir: string;
 }> => {
-  const tempDir = dirSync().name;
+  if (!packageRootDir) {
+    // at runtime we are installed in an arbitrary npx cache folder,
+    // we need to find the rootDir ourselves and cannot rely on paths relative to src
+    const nodeModule = require.main;
+    if (!nodeModule) {
+      throw new Error("package was not installed as valid nodeJS module");
+    }
+    const appDir = dirname(nodeModule.filename);
+    packageRootDir = getPackageRootLevel(appDir);
+  }
+
+  const tempDir = path.join(packageRootDir, "temp");
+
+  if (!existsSync(tempDir)) {
+    await fs.mkdir(tempDir);
+  }
+
   const outputDir = path.join(tempDir, "output");
 
   const testFilePath = path.join(tempDir, `${randomUUID()}.spec.ts`);
@@ -66,28 +86,24 @@ export const prepareTestRun = async ({
   const configFilePath = path.join(tempDir, `${randomUUID()}.config.ts`);
   writeFileSync(configFilePath, getConfig(url, outputDir));
 
-  return { testFilePath, configFilePath, outputDir };
+  return { testFilePath, configFilePath, outputDir, packageRootDir };
 };
 
 export const runTest = async ({
   configFilePath,
   testFilePath,
   outputDir,
+  packageRootDir,
 }: {
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
+  packageRootDir: string;
 }): Promise<void> => {
   const command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
 
-  const nodeModule = require.main;
-  if (!nodeModule) {
-    throw new Error("package was not installed as valid nodeJS module");
-  }
-  const appDir = dirname(nodeModule.filename);
-
   const { stderr } = await promisify(exec)(command, {
-    cwd: getPackageRootLevel(appDir),
+    cwd: packageRootDir,
   });
 
   if (stderr) {
