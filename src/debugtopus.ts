@@ -4,7 +4,6 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
-import { dirSync } from "tmp";
 import { getPlaywrightCode } from "./octomind-api";
 import fs from "fs/promises";
 
