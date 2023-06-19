@@ -12,14 +12,6 @@ test.describe("test execution", () => {
     });
   });`;
 
-  test.afterEach(async () => {
-    try {
-      await fs.rm("temp", { recursive: true });
-    } catch (error) {
-      // we don't care
-    }
-  });
-
   test("it can execute playwright", async () => {
     const preparationResults = await prepareTestRun({
       code: testCode,

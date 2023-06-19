@@ -19,14 +19,6 @@ describe("prepareTestRun", () => {
 
   const url = "https://foo.bar";
 
-  afterEach(async () => {
-    try {
-      await fs.rm("temp", { recursive: true });
-    } catch (error) {
-      // we don't care
-    }
-  });
-
   it("generates the correct files", async () => {
     const { testFilePath, configFilePath, outputDir } = await prepareTestRun({
       url,
