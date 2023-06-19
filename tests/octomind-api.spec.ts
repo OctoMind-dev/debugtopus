@@ -41,7 +41,7 @@ describe("octomind-api", () => {
     await expect(
       getPlaywrightCode({ testCaseId, token, url, octomindUrl })
     ).rejects.toMatchInlineSnapshot(
-      `[Error: failed to get code from https://app.octomind.dev/api/v1/test-cases/testId/code?executionUrl=https://foo.bar: "Internal Server Error"]`
+      `[Error: failed to get code from https://app.octomind.dev/api/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: "Internal Server Error"]`
     );
   });
 });
