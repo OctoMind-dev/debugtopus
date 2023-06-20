@@ -104,7 +104,7 @@ export const runTest = async ({
   let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
 
   if (runMode === "ui") {
-    command += "--ui";
+    command += " --ui";
   }
 
   const { stderr } = await promisify(exec)(command, {
