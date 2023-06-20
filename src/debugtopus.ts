@@ -92,14 +92,20 @@ export const runTest = async ({
   configFilePath,
   testFilePath,
   outputDir,
+  runMode,
   packageRootDir,
 }: {
   configFilePath: string;
   testFilePath: string;
   outputDir: string;
   packageRootDir: string;
+  runMode: "ui" | "headless";
 }): Promise<void> => {
-  const command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+  let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+
+  if (runMode === "ui") {
+    command += "--ui";
+  }
 
   const { stderr } = await promisify(exec)(command, {
     cwd: packageRootDir,
@@ -142,5 +148,5 @@ export const debugtopus = async (): Promise<void> => {
     }),
   });
 
-  await runTest(testRunPreparationResults);
+  await runTest({ ...testRunPreparationResults, runMode: "ui" });
 };
