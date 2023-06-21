@@ -1,11 +1,12 @@
 import { Command } from "commander";
-import { existsSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync, access } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import { getPlaywrightCode } from "./octomind-api";
 import fs from "fs/promises";
+import { chromium } from "@playwright/test";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -61,7 +62,7 @@ export const prepareTestRun = async ({
   packageRootDir: string;
 }> => {
   if (!packageRootDir) {
-    // at runtime we are installed in an arbitrary npx cache folder,
+    // at runtime, we are installed in an arbitrary npx cache folder,
     // we need to find the rootDir ourselves and cannot rely on paths relative to src
     const nodeModule = require.main;
     if (!nodeModule) {
@@ -76,13 +77,13 @@ export const prepareTestRun = async ({
   if (!existsSync(tempDir)) {
     await fs.mkdir(tempDir);
   }
-
+  const fileNameUUID = randomUUID();
   const outputDir = path.join(tempDir, "output");
 
-  const testFilePath = path.join(tempDir, `${randomUUID()}.spec.ts`);
+  const testFilePath = path.join(tempDir, `${fileNameUUID}.spec.ts`);
   writeFileSync(testFilePath, code);
 
-  const configFilePath = path.join(tempDir, `${randomUUID()}.config.ts`);
+  const configFilePath = path.join(tempDir, `${fileNameUUID}.config.ts`);
   writeFileSync(configFilePath, getConfig(url, outputDir));
 
   return { testFilePath, configFilePath, outputDir, packageRootDir };
@@ -101,6 +102,25 @@ export const runTest = async ({
   packageRootDir: string;
   runMode: "ui" | "headless";
 }): Promise<void> => {
+  const file = chromium.executablePath();
+
+  // todo: need to await for errored promise
+  await access(file, fs.constants.X_OK, async (error) => {
+    if (error!.code === "ENOENT") {
+      console.log(
+        "Couldn't find chromium executable, some message about running 'npx playwright install'..."
+      );
+
+      const someVariable = promisify(exec)("npx playwright install", {
+        cwd: packageRootDir,
+      });
+
+      someVariable.child.stdout!.on("data", (data) => console.log(data));
+
+      await someVariable; // todo:  this does not work
+    }
+  });
+
   let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
 
   if (runMode === "ui") {
