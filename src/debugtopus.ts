@@ -106,7 +106,7 @@ export const runTest = async ({
 
   // todo: need to await for errored promise
   await access(file, fs.constants.X_OK, async (error) => {
-    if (error!.code === "ENOENT") {
+    if (error && error.code === "ENOENT") {
       console.log(
         "Couldn't find chromium executable, some message about running 'npx playwright install'..."
       );
