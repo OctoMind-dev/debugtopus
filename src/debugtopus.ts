@@ -89,6 +89,41 @@ export const prepareTestRun = async ({
   return { testFilePath, configFilePath, outputDir, packageRootDir };
 };
 
+async function ensureChromiumIsInstalled(packageRootDir: string) {
+  const file = chromium.executablePath();
+
+  await new Promise<void>((resolve, reject) => {
+    access(file, fs.constants.X_OK, async (error) => {
+      if (!error) {
+        resolve();
+        return;
+      }
+      if (error.code !== "ENOENT") {
+        reject(error);
+        return;
+      }
+      console.log(
+        "Couldn't find any chromium binary, executing 'npx playwright install chromium'"
+      );
+
+      const playwrightInstallExecution = promisify(exec)(
+        "npx playwright install chromium",
+        {
+          cwd: packageRootDir,
+        }
+      );
+
+      playwrightInstallExecution.child.stdout?.on("data", (data) =>
+        console.log(data)
+      );
+
+      await playwrightInstallExecution;
+
+      resolve();
+    });
+  });
+}
+
 export const runTest = async ({
   configFilePath,
   testFilePath,
@@ -102,24 +137,7 @@ export const runTest = async ({
   packageRootDir: string;
   runMode: "ui" | "headless";
 }): Promise<void> => {
-  const file = chromium.executablePath();
-
-  // todo: need to await for errored promise
-  await access(file, fs.constants.X_OK, async (error) => {
-    if (error && error.code === "ENOENT") {
-      console.log(
-        "Couldn't find chromium executable, some message about running 'npx playwright install'..."
-      );
-
-      const someVariable = promisify(exec)("npx playwright install", {
-        cwd: packageRootDir,
-      });
-
-      someVariable.child.stdout!.on("data", (data) => console.log(data));
-
-      await someVariable; // todo:  this does not work
-    }
-  });
+  await ensureChromiumIsInstalled(packageRootDir);
 
   let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
 
