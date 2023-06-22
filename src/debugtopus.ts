@@ -89,7 +89,9 @@ export const prepareTestRun = async ({
   return { testFilePath, configFilePath, outputDir, packageRootDir };
 };
 
-async function ensureChromiumIsInstalled(packageRootDir: string) {
+export const ensureChromiumIsInstalled = async (
+  packageRootDir: string
+): Promise<void> => {
   const file = chromium.executablePath();
 
   await new Promise<void>((resolve, reject) => {
@@ -122,7 +124,7 @@ async function ensureChromiumIsInstalled(packageRootDir: string) {
       resolve();
     });
   });
-}
+};
 
 export const runTest = async ({
   configFilePath,

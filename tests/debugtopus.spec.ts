@@ -1,12 +1,33 @@
-import { getConfig, getPackageRootLevel, prepareTestRun } from "@/debugtopus";
-import { existsSync, readFileSync } from "fs";
+import {
+  ensureChromiumIsInstalled,
+  getConfig,
+  getPackageRootLevel,
+  prepareTestRun,
+} from "@/debugtopus";
+import {
+  access,
+  existsSync,
+  NoParamCallback,
+  PathLike,
+  readFileSync,
+} from "fs";
 import path from "path";
 import fs from "fs/promises";
+import { exec } from "child_process";
 
 jest.mock("fs", () => ({
   ...jest.requireActual("fs"),
   existsSync: jest.fn(jest.requireActual("fs").existsSync),
 }));
+
+jest.mock("child_process", () => {
+  return {
+    ...jest.requireActual("util"),
+    exec: jest.fn(() => {
+      return jest.fn();
+    }),
+  };
+});
 
 describe("prepareTestRun", () => {
   const packageRootDir = path.join(__dirname, "..");
@@ -19,7 +40,7 @@ describe("prepareTestRun", () => {
     });
   });`;
 
-  const url = "https://thisIsARealUrl.com";
+  const url = "https://octomind.dev";
 
   afterEach(async () => {
     try {
