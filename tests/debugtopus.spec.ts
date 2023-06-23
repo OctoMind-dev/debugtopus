@@ -19,7 +19,7 @@ describe("prepareTestRun", () => {
     });
   });`;
 
-  const url = "https://thisIsARealUrl.com";
+  const url = "https://octomind.dev";
 
   afterEach(async () => {
     try {
