@@ -1,12 +1,12 @@
 import { Command } from "commander";
-import { existsSync, writeFileSync, access } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import { getPlaywrightCode } from "./octomind-api";
 import fs from "fs/promises";
-import { chromium } from "@playwright/test";
+import { ensureChromiumIsInstalled } from "@/installation";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -87,43 +87,6 @@ export const prepareTestRun = async ({
   writeFileSync(configFilePath, getConfig(url, outputDir));
 
   return { testFilePath, configFilePath, outputDir, packageRootDir };
-};
-
-export const ensureChromiumIsInstalled = async (
-  packageRootDir: string
-): Promise<void> => {
-  const file = chromium.executablePath();
-
-  await new Promise<void>((resolve, reject) => {
-    access(file, fs.constants.X_OK, async (error) => {
-      if (!error) {
-        resolve();
-        return;
-      }
-      if (error.code !== "ENOENT") {
-        reject(error);
-        return;
-      }
-      console.log(
-        "Couldn't find any chromium binary, executing 'npx playwright install chromium'"
-      );
-
-      const playwrightInstallExecution = promisify(exec)(
-        "npx playwright install chromium",
-        {
-          cwd: packageRootDir,
-        }
-      );
-
-      playwrightInstallExecution.child.stdout?.on("data", (data) =>
-        console.log(data)
-      );
-
-      await playwrightInstallExecution;
-
-      resolve();
-    });
-  });
 };
 
 export const runTest = async ({
