@@ -1,6 +1,6 @@
 {
   "name": "@octomind/debugtopus",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "thin wrapper around ngrok and playwright to run your automagically-maintained tests locally",
   "main": "./dist/index.js",
   "type": "commonjs",
@@ -30,8 +30,7 @@
   "dependencies": {
     "@playwright/test": "1.35.1",
     "axios": "^1.4.0",
-    "commander": "^10.0.1",
-    "tmp": "^0.2.1"
+    "commander": "^10.0.1"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "^18.12.2",
