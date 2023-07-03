@@ -4,9 +4,6 @@
     "types": ["jest", "node"],
     "outDir": "dist",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
   },
   "exclude": ["node_modules", "dist"],
   "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]

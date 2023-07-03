@@ -1,4 +1,8 @@
-import { getConfig, getPackageRootLevel, prepareTestRun } from "@/debugtopus";
+import {
+  getConfig,
+  getPackageRootLevel,
+  prepareTestRun,
+} from "../src/debugtopus";
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import fs from "fs/promises";

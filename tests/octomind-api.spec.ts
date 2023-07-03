@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { getPlaywrightCode } from "@/octomind-api";
+import { getPlaywrightCode } from "../src/octomind-api";
 
 jest.mock("axios");
 
