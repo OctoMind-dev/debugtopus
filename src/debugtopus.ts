@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import { getPlaywrightCode } from "./octomind-api";
 import fs from "fs/promises";
-import { ensureChromiumIsInstalled } from "@/installation";
+import { ensureChromiumIsInstalled } from "./installation";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";

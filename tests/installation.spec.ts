@@ -1,4 +1,4 @@
-import { ensureChromiumIsInstalled } from "@/installation";
+import { ensureChromiumIsInstalled } from "../src/installation";
 import { exec } from "child_process";
 import { access, NoParamCallback, PathLike } from "fs";
 
