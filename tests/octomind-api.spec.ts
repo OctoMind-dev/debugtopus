@@ -20,7 +20,7 @@ describe("octomind-api", () => {
     await getPlaywrightCode({ testCaseId, token, url, octomindUrl });
 
     expect(axios.get).toHaveBeenCalledWith(
-      `https://app.octomind.dev/api/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
+      `https://app.octomind.dev/api/bearer/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
         url
       )}`,
       {
@@ -41,7 +41,7 @@ describe("octomind-api", () => {
     await expect(
       getPlaywrightCode({ testCaseId, token, url, octomindUrl })
     ).rejects.toMatchInlineSnapshot(
-      `[Error: failed to get code from https://app.octomind.dev/api/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: "Internal Server Error"]`
+      `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: "Internal Server Error"]`
     );
   });
 });
