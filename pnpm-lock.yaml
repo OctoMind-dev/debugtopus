@@ -18,7 +18,7 @@ dependencies:
 devDependencies:
   '@tsconfig/node-lts':
     specifier: ^18.12.2
-    version: 18.12.2
+    version: 18.12.3
   '@types/jest':
     specifier: ^29.5.1
     version: 29.5.1
@@ -1043,8 +1043,8 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: true
 
-  /@tsconfig/node-lts@18.12.2:
-    resolution: {integrity: sha512-1zbWpsZkChnemJsRm+G2EyjuPueNPkjBEfp08ET1uCv0CUL/5AK1IZvFtEsw7ZyEqojIydye3mwt6k8isULj4A==}
+  /@tsconfig/node-lts@18.12.3:
+    resolution: {integrity: sha512-a8FraAjwaGKERCO5PowJeeCE/0Kv1whqegfNwJRIPG08Z5QDr6Kl1CgRrdIjGQtUCpSm+/BDCGeRKfAF1mg+ZQ==}
     dev: true
 
   /@tsconfig/node10@1.0.9:
