@@ -28,7 +28,7 @@
     "debugtopus": "./dist/index.js"
   },
   "dependencies": {
-    "@playwright/test": "1.35.1",
+    "@playwright/test": "1.36.2",
     "axios": "^1.4.0",
     "commander": "^10.0.1"
   },
