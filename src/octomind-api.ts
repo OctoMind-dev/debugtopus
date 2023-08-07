@@ -12,7 +12,7 @@ export const getPlaywrightCode = async ({
   octomindUrl: string;
 }): Promise<string> => {
   const endpoint = `${octomindUrl}/api/bearer/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
-    url
+    url,
   )}`;
   try {
     const axiosResponse = await axios.get(endpoint, {
@@ -22,7 +22,7 @@ export const getPlaywrightCode = async ({
   } catch (error) {
     const responseBody = (error as AxiosError).response?.data;
     throw new Error(
-      `failed to get code from ${endpoint}: ${JSON.stringify(responseBody)}`
+      `failed to get code from ${endpoint}: ${JSON.stringify(responseBody)}`,
     );
   }
 };

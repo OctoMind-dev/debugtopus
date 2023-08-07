@@ -5,7 +5,7 @@ import { promisify } from "util";
 import { exec } from "child_process";
 
 export const ensureChromiumIsInstalled = async (
-  packageRootDir: string
+  packageRootDir: string,
 ): Promise<void> => {
   const file = chromium.executablePath();
 
@@ -19,19 +19,21 @@ export const ensureChromiumIsInstalled = async (
         reject(error);
         return;
       }
+      // eslint-disable-next-line no-console
       console.log(
-        "Couldn't find any chromium binary, executing 'npx playwright install chromium'"
+        "Couldn't find any chromium binary, executing 'npx playwright install chromium'",
       );
 
       const playwrightInstallExecution = promisify(exec)(
         "npx playwright install chromium",
         {
           cwd: packageRootDir,
-        }
+        },
       );
 
       playwrightInstallExecution.child?.stdout?.on("data", (data) =>
-        console.log(data)
+        // eslint-disable-next-line no-console
+        console.log(data),
       );
 
       await playwrightInstallExecution;

@@ -115,9 +115,11 @@ export const runTest = async ({
   });
 
   if (stderr) {
+    // eslint-disable-next-line no-console
     console.error(stderr);
     process.exit(1);
   } else {
+    // eslint-disable-next-line no-console
     console.log(`success, you can find your artifacts at ${outputDir}`);
   }
 };
@@ -128,14 +130,14 @@ export const debugtopus = async (): Promise<void> => {
   program
     .requiredOption(
       "-t, --token <string>",
-      "token to authenticate against octomind api"
+      "token to authenticate against octomind api",
     )
     .requiredOption("-i, --id <uuid>", "id of the test case you want to run")
     .requiredOption("-u, --url <url>", "url the tests should run against")
     .option(
       "-o, --octomindUrl <url>",
       "base url of the octomind api",
-      "https://app.octomind.dev"
+      "https://app.octomind.dev",
     )
     .parse(process.argv);
 
