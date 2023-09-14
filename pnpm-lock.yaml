@@ -66,7 +66,7 @@ devDependencies:
     version: 10.9.1(@types/node@20.6.0)(typescript@5.2.2)
   tsx:
     specifier: ^3.12.7
-    version: 3.12.9
+    version: 3.12.10
   typescript:
     specifier: ^5.0.4
     version: 5.2.2
@@ -447,8 +447,8 @@ packages:
       source-map-support: 0.5.21
     dev: true
 
-  /@esbuild-kit/esm-loader@2.6.2:
-    resolution: {integrity: sha512-fQ+HIAwSZkNDmqoR+pu2xEeBhuO1D3BKhokQejajbmyLlPKpGx/F292zABc9WGN63VJ4SRI58SicdDqa3VyV/w==}
+  /@esbuild-kit/esm-loader@2.6.3:
+    resolution: {integrity: sha512-lUziJdacVDQrg65DwQ+OOQR9B1LQE2/pY77H+oVT0KQDLtsT2XfbHz7O+f0zUvexSWPKxMXa8h4RXT5PFAlv/g==}
     dependencies:
       '@esbuild-kit/core-utils': 3.3.0
       get-tsconfig: 4.7.0
@@ -4630,13 +4630,13 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /tsx@3.12.9:
-    resolution: {integrity: sha512-N9Cpuiy55IcemQ2kouH1ZqDvjUa31mkhIYmnJKnvDp0sLQrK9MUrRuN/XzW70iTk5a2kX2A63wLYWORwa34vug==}
+  /tsx@3.12.10:
+    resolution: {integrity: sha512-2+46h4xvUt1aLDNvk5YBT8Uzw+b7BolGbn7iSMucYqCXZiDc+1IMghLVdw8kKjING32JFOeO+Am9posvjkeclA==}
     hasBin: true
     dependencies:
       '@esbuild-kit/cjs-loader': 2.4.2
       '@esbuild-kit/core-utils': 3.3.0
-      '@esbuild-kit/esm-loader': 2.6.2
+      '@esbuild-kit/esm-loader': 2.6.3
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
