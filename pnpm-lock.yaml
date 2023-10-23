@@ -27,7 +27,7 @@ devDependencies:
     version: 20.8.5
   '@types/tmp':
     specifier: ^0.2.3
-    version: 0.2.4
+    version: 0.2.5
   '@typescript-eslint/parser':
     specifier: ^6.2.1
     version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
@@ -1126,8 +1126,8 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/tmp@0.2.4:
-    resolution: {integrity: sha512-Vq3rwM+2KgiLacq68EjTJD9cuJ/ne5pXntWn8B8Rxj25SLkGAhCgooCZ1lhcIcV5OFveJ+s5Cqpi+XKfFM/xZA==}
+  /@types/tmp@0.2.5:
+    resolution: {integrity: sha512-KodRrjqWrk/3VyzfR4aeXkf2n5Ssg+bvVUhXlvHVffLiIHriLlrO3vYobB+Kvnr9DkNzMiyWHT3G6hT/xX0ryQ==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
