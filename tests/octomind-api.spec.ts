@@ -21,11 +21,11 @@ describe("octomind-api", () => {
 
     expect(axios.get).toHaveBeenCalledWith(
       `https://app.octomind.dev/api/bearer/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
-        url
+        url,
       )}`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
   });
 
@@ -39,9 +39,7 @@ describe("octomind-api", () => {
     jest.mocked(axios.get).mockRejectedValue(axiosError);
 
     await expect(
-      getPlaywrightCode({ testCaseId, token, url, octomindUrl })
-    ).rejects.toMatchInlineSnapshot(
-      `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: "Internal Server Error"]`
-    );
+  getPlaywrightCode({ testCaseId, token, url, octomindUrl })
+).rejects.toMatchInlineSnapshot(`[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`);
   });
 });

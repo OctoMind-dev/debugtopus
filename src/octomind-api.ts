@@ -21,8 +21,11 @@ export const getPlaywrightCode = async ({
     return axiosResponse.data.testCode;
   } catch (error) {
     const responseBody = (error as AxiosError).response?.data;
+    const responseCode = (error as AxiosError).response?.status;
     throw new Error(
-      `failed to get code from ${endpoint}: ${JSON.stringify(responseBody)}`,
+      `failed to get code from ${endpoint}: response body: '${JSON.stringify(
+        responseBody,
+      )}' statusCode: '${JSON.stringify(responseCode)}'`,
     );
   }
 };
