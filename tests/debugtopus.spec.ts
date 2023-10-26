@@ -64,7 +64,7 @@ describe("prepareTestRun", () => {
 
       const expectedDir = path.join(appDir, ...levelUps);
       expect(dir).toEqual(expectedDir);
-    }
+    },
   );
 
   it.each([5, 6, 10, 100])(
@@ -79,8 +79,19 @@ describe("prepareTestRun", () => {
       const appDir = "someDir";
 
       expect(() => getPackageRootLevel(appDir)).toThrowError(
-        "can't find root level node modules"
+        "can't find root level node modules",
       );
-    }
+    },
   );
+
+  it("should replace broken octal escape sequences for windows paths", () => {
+    const brokenWindowsOutputPath = "some/broken/path/1234".replaceAll(
+      "/",
+      "\\",
+    );
+
+    const config = getConfig("doesn't/matter", brokenWindowsOutputPath);
+
+    expect(config).toContain('outputDir: "some\\\\broken\\\\path\\\\1234"');
+  });
 });
