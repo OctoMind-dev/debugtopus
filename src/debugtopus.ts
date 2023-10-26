@@ -16,7 +16,7 @@ export default defineConfig({
   use: {
     baseURL: "${url}",
   },
-  outputDir: "${outputDir}",
+  outputDir: "${outputDir.replaceAll("\\", "\\\\")}",
   projects: [
     {
       name: "chromium",
