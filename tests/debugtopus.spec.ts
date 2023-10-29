@@ -1,4 +1,5 @@
 import {
+  createPlaywrightCommand,
   getConfig,
   getPackageRootLevel,
   prepareTestRun,
@@ -93,5 +94,16 @@ describe("prepareTestRun", () => {
     const config = getConfig("doesn't/matter", brokenWindowsOutputPath);
 
     expect(config).toContain('outputDir: "some\\\\broken\\\\path\\\\1234"');
+  });
+
+  it("should not have \\ in command path", async () => {
+    const backslashPath = "C:\\User\\Some\\Path";
+
+    const command = createPlaywrightCommand({
+      configFilePath: backslashPath,
+      testFilePath: backslashPath,
+    });
+
+    expect(command).not.toContain("\\");
   });
 });
