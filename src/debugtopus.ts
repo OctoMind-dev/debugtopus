@@ -89,6 +89,18 @@ export const prepareTestRun = async ({
   return { testFilePath, configFilePath, outputDir, packageRootDir };
 };
 
+export const createPlaywrightCommand = ({
+  configFilePath,
+  testFilePath,
+}: {
+  configFilePath: string;
+  testFilePath: string;
+}): string =>
+  `npx playwright test --config=${configFilePath.replaceAll(
+    "\\",
+    "/",
+  )} ${testFilePath.replaceAll("\\", "/")}`;
+
 export const runTest = async ({
   configFilePath,
   testFilePath,
@@ -104,11 +116,14 @@ export const runTest = async ({
 }): Promise<void> => {
   await ensureChromiumIsInstalled(packageRootDir);
 
-  let command = `npx playwright test --config=${configFilePath} ${testFilePath}`;
+  let command = createPlaywrightCommand({ configFilePath, testFilePath });
 
   if (runMode === "ui") {
     command += " --ui";
   }
+
+  // eslint-disable-next-line no-console
+  console.log(`executing command : '${command}'`);
 
   const { stderr } = await promisify(exec)(command, {
     cwd: packageRootDir,
