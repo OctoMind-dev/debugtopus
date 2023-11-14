@@ -66,7 +66,7 @@ devDependencies:
     version: 10.9.1(@types/node@20.9.0)(typescript@5.2.2)
   tsx:
     specifier: ^4.0.0
-    version: 4.1.0
+    version: 4.1.2
   typescript:
     specifier: ^5.0.4
     version: 5.2.2
@@ -4691,8 +4691,8 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /tsx@4.1.0:
-    resolution: {integrity: sha512-u4l17Yd63Wsk2fzNn1wZCmcS9kwJ/2ysl7wuoVggv2hd3NjLA5JQPpyJMXoWSXOwOvoQUzNcu/sf/35HEsnXsg==}
+  /tsx@4.1.2:
+    resolution: {integrity: sha512-1spM1bFV6MP2s4tO4tDC7g52fsaFdtEWdO4GfGdqi20qUgPbnAJqixOyIAvCSx1DDj3YIUB4CD06owTWUsOAuQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
