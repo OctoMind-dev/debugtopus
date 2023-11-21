@@ -1,10 +1,24 @@
 {
-  "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "node"],
-    "outDir": "dist",
-    "baseUrl": ".",
+    "types": [
+      "jest",
+      "node"
+    ],
+    "target": "ESNext",
+    "module": "NodeNext",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
