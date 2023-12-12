@@ -149,6 +149,10 @@ export const debugtopus = async (): Promise<void> => {
     )
     .requiredOption("-i, --id <uuid>", "id of the test case you want to run")
     .requiredOption("-u, --url <url>", "url the tests should run against")
+    .requiredOption(
+      "-tt, --testTargetId <uuid>",
+      "id of the test target of the test case",
+    )
     .option(
       "-o, --octomindUrl <url>",
       "base url of the octomind api",
@@ -162,6 +166,7 @@ export const debugtopus = async (): Promise<void> => {
     url: options.url,
     code: await getPlaywrightCode({
       testCaseId: options.id,
+      testTargetId: options.testTargetId,
       token: options.token,
       url: options.url,
       octomindUrl: options.octomindUrl,
