@@ -37,7 +37,7 @@
     "commander": "^11.0.0"
   },
   "devDependencies": {
-    "@tsconfig/node-lts": "^18.12.2",
+    "@tsconfig/node-lts": "^20.1.0",
     "@types/jest": "^29.5.1",
     "@types/node": "^20.4.7",
     "@types/tmp": "^0.2.3",
