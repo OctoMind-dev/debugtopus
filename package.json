@@ -1,6 +1,6 @@
 {
   "name": "@octomind/debugtopus",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Thin wrapper around playwright and the octomind api to run your automagically-maintained tests locally",
   "main": "./dist/index.js",
   "engines": {
@@ -17,8 +17,9 @@
     "lint": "eslint src/**/*.ts --max-warnings=0",
     "build": "tsc --project tsconfig.build.json",
     "start": "npx tsx src/index.ts",
-    "test": "jest --ci && pnpm test:playwright",
+    "test": "jest --ci && pnpm test:playwright && pnpm test:cli",
     "test:playwright": "npx playwright test",
+    "test:cli": "pnpm build && pnpm link . && debugtopus -h",
     "test:watch": "jest --watch"
   },
   "repository": {
