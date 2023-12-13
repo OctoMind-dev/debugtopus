@@ -5,13 +5,15 @@ export const getPlaywrightCode = async ({
   token,
   url,
   octomindUrl,
+  testTargetId,
 }: {
   testCaseId: string;
+  testTargetId: string;
   token: string;
   url: string;
   octomindUrl: string;
 }): Promise<string> => {
-  const endpoint = `${octomindUrl}/api/bearer/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
     url,
   )}`;
   try {

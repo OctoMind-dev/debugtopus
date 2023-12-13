@@ -13,6 +13,7 @@ npm i @octomind/debugtopus
 ### Required
 * `-i, --id <test-case-id>` - ID of the test case you want to run locally
 * `-t, --token <token>` - auth token to authorise against octomind app
+* `-tt, --testTargetId <test-target-id>` - ID of the test target you want to run against
 * `-u, --url <local-url>` - an url of your app you want the tests to be run against
 ### Optional
 * `-o, --octomindUrl <octo-url>` - defaults to production app `app.octomind.dev`. Used by octoneers to test against different environments

@@ -6,6 +6,7 @@ jest.mock("axios");
 describe("octomind-api", () => {
   const testCode = "";
   const testCaseId = "testId";
+  const testTargetId = "testTargetId";
   const token = "token";
   const octomindUrl = "https://app.octomind.dev";
   const url = "https://thisIsARealUrl.com";
@@ -17,10 +18,16 @@ describe("octomind-api", () => {
   });
 
   it("fetches the correct code with authentication", async () => {
-    await getPlaywrightCode({ testCaseId, token, url, octomindUrl });
+    await getPlaywrightCode({
+      testCaseId,
+      token,
+      url,
+      octomindUrl,
+      testTargetId,
+    });
 
     expect(axios.get).toHaveBeenCalledWith(
-      `https://app.octomind.dev/api/bearer/v1/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
+      `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
         url,
       )}`,
       {
@@ -39,7 +46,9 @@ describe("octomind-api", () => {
     jest.mocked(axios.get).mockRejectedValue(axiosError);
 
     await expect(
-  getPlaywrightCode({ testCaseId, token, url, octomindUrl })
-).rejects.toMatchInlineSnapshot(`[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`);
+      getPlaywrightCode({ testCaseId, token, url, octomindUrl, testTargetId }),
+    ).rejects.toMatchInlineSnapshot(
+      `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`,
+    );
   });
 });
