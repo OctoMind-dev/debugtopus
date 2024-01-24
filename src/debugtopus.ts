@@ -1,12 +1,11 @@
-import { Command } from "commander";
 import { existsSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
-import { getPlaywrightCode } from "./octomind-api";
 import fs from "fs/promises";
 import { ensureChromiumIsInstalled } from "./installation";
+import { TestCase } from "./octomind-api";
 
 export const getConfig = (url: string, outputDir: string) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -47,20 +46,25 @@ export const getPackageRootLevel = (appDir: string): string => {
   return rootDir;
 };
 
+export type TestPreparationResult = {
+  configFilePath: string;
+  testFilePaths: string[];
+  testDirectory: string;
+  outputDir: string;
+  packageRootDir: string;
+};
+
+export type TestCaseWithCode = TestCase & { code: string };
+
 export const prepareTestRun = async ({
   url,
-  code,
+  testCasesWithCode,
   packageRootDir,
 }: {
   url: string;
-  code: string;
+  testCasesWithCode: TestCaseWithCode[];
   packageRootDir?: string;
-}): Promise<{
-  configFilePath: string;
-  testFilePath: string;
-  outputDir: string;
-  packageRootDir: string;
-}> => {
+}): Promise<TestPreparationResult> => {
   if (!packageRootDir) {
     // at runtime, we are installed in an arbitrary npx cache folder,
     // we need to find the rootDir ourselves and cannot rely on paths relative to src
@@ -77,46 +81,61 @@ export const prepareTestRun = async ({
   if (!existsSync(tempDir)) {
     await fs.mkdir(tempDir);
   }
-  const fileNameUUID = randomUUID();
   const outputDir = path.join(tempDir, "output");
 
-  const testFilePath = path.join(tempDir, `${fileNameUUID}.spec.ts`);
-  writeFileSync(testFilePath, code);
+  const testFilePaths: string[] = [];
 
+  for (const testCase of testCasesWithCode) {
+    const fileNameUUID = randomUUID();
+    const testFilePath = path.join(
+      tempDir,
+      `${testCase.description ?? testCase.id}-${fileNameUUID}.spec.ts`,
+    );
+    writeFileSync(testFilePath, testCase.code);
+    testFilePaths.push(testFilePath);
+  }
+
+  const fileNameUUID = randomUUID();
   const configFilePath = path.join(tempDir, `${fileNameUUID}.config.ts`);
   writeFileSync(configFilePath, getConfig(url, outputDir));
 
-  return { testFilePath, configFilePath, outputDir, packageRootDir };
+  return {
+    testFilePaths,
+    configFilePath,
+    testDirectory: tempDir,
+    outputDir,
+    packageRootDir,
+  };
 };
 
 export const createPlaywrightCommand = ({
   configFilePath,
-  testFilePath,
+  testDirectory,
 }: {
   configFilePath: string;
-  testFilePath: string;
+  testDirectory: string;
 }): string =>
   `npx playwright test --config=${configFilePath.replaceAll(
     "\\",
     "/",
-  )} ${testFilePath.replaceAll("\\", "/")}`;
+  )} ${testDirectory.replaceAll("\\", "/")}`;
 
-export const runTest = async ({
+export const runTests = async ({
   configFilePath,
-  testFilePath,
+  testDirectory,
   outputDir,
   runMode,
   packageRootDir,
 }: {
   configFilePath: string;
-  testFilePath: string;
+  testDirectory: string;
   outputDir: string;
   packageRootDir: string;
   runMode: "ui" | "headless";
 }): Promise<void> => {
   await ensureChromiumIsInstalled(packageRootDir);
 
-  let command = createPlaywrightCommand({ configFilePath, testFilePath });
+  let command = createPlaywrightCommand({ configFilePath, testDirectory });
 
   if (runMode === "ui") {
     command += " --ui";
@@ -137,41 +156,4 @@ export const runTest = async ({
     // eslint-disable-next-line no-console
     console.log(`success, you can find your artifacts at ${outputDir}`);
   }
-};
-
-export const debugtopus = async (): Promise<void> => {
-  const program = new Command();
-
-  program
-    .requiredOption(
-      "-t, --token <string>",
-      "token to authenticate against octomind api",
-    )
-    .requiredOption("-i, --id <uuid>", "id of the test case you want to run")
-    .requiredOption("-u, --url <url>", "url the tests should run against")
-    .requiredOption(
-      "-tt, --testTargetId <uuid>",
-      "id of the test target of the test case",
-    )
-    .option(
-      "-o, --octomindUrl <url>",
-      "base url of the octomind api",
-      "https://app.octomind.dev",
-    )
-    .parse(process.argv);
-
-  const options = program.opts();
-
-  const testRunPreparationResults = await prepareTestRun({
-    url: options.url,
-    code: await getPlaywrightCode({
-      testCaseId: options.id,
-      testTargetId: options.testTargetId,
-      token: options.token,
-      url: options.url,
-      octomindUrl: options.octomindUrl,
-    }),
-  });
-
-  await runTest({ ...testRunPreparationResults, runMode: "ui" });
 };

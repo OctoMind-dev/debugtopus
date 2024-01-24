@@ -1,15 +1,23 @@
 // eslint-disable-next-line filenames/match-regex
 import { test } from "@playwright/test";
 import fs from "fs/promises";
-import { prepareTestRun, runTest } from "../src/debugtopus";
+import { prepareTestRun, runTests } from "../src/debugtopus";
 import path from "path";
 
 test.describe("test execution", () => {
-  const testCode = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
+  const testCode1 = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
 
   test.describe("test description", () => {
     test("it should be able to run playwright", () => {
       expect(true).toBeTruthy();
+    });
+  });`;
+
+  const testCode2 = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
+
+  test.describe("test description 2", () => {
+    test("it should be able to run playwright again", () => {
+      expect(false).toBeFalsy();
     });
   });`;
 
@@ -21,27 +29,34 @@ test.describe("test execution", () => {
     }
   });
 
-  test("it can execute playwright", async () => {
-    const packageRootDir = path.join(__dirname, "..");
-    const preparationResults = await prepareTestRun({
-      code: testCode,
-      url: "https://codesphere.com/ide/signin?variant=dark",
-      packageRootDir,
-    });
+  for (const codePerTest of [[testCode1], [testCode1, testCode2]]) {
+    test(`it can execute playwright for '${codePerTest.length}' test(s)`, async () => {
+      const packageRootDir = path.join(__dirname, "..");
+      const preparationResults = await prepareTestRun({
+        testCasesWithCode: codePerTest.map((code, index) => ({
+          id: `${index}`,
+          code,
+        })),
+        url: "https://codesphere.com/ide/signin?variant=dark",
+        packageRootDir,
+      });
 
-    await runTest({ ...preparationResults, runMode: "headless" });
-  });
+      await runTests({ ...preparationResults, runMode: "headless" });
+    });
+  }
 
   test("it can execute playwright from an arbitrary folder", async () => {
     process.chdir("..");
     const packageRootDir = path.join(__dirname, "..");
 
     const preparationResults = await prepareTestRun({
-      code: testCode,
+      testCasesWithCode: [
+        { code: testCode1, id: "id", description: "someDescription" },
+      ],
       url: "https://codesphere.com/ide/signin?variant=dark",
       packageRootDir,
     });
 
-    await runTest({ ...preparationResults, runMode: "headless" });
+    await runTests({ ...preparationResults, runMode: "headless" });
   });
 });
