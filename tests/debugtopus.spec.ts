@@ -13,8 +13,6 @@ jest.mock("fs", () => ({
   existsSync: jest.fn(jest.requireActual("fs").existsSync),
 }));
 
-jest.mock("");
-
 describe("debugtopus", () => {
   const packageRootDir = path.join(__dirname, "..");
   const tempDir = path.join(packageRootDir, "temp");
