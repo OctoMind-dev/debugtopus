@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { debugtopus } from "./debugtopus";
+import { debugtopus } from "./cli";
 
 void debugtopus();
