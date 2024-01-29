@@ -3,7 +3,7 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
-import fs, { rmdir } from "fs/promises";
+import fs from "fs/promises";
 import { ensureChromiumIsInstalled } from "./installation";
 import { TestCase } from "./octomind-api";
 
