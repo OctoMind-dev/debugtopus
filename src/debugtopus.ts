@@ -3,7 +3,7 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
-import fs from "fs/promises";
+import fs, { rmdir } from "fs/promises";
 import { ensureChromiumIsInstalled } from "./installation";
 import { TestCase } from "./octomind-api";
 
@@ -76,11 +76,15 @@ export const prepareTestRun = async ({
     packageRootDir = getPackageRootLevel(appDir);
   }
 
-  const tempDir = path.join(packageRootDir, "temp");
+  const tempDir = path.join(packageRootDir, `temp`);
 
   if (!existsSync(tempDir)) {
     await fs.mkdir(tempDir);
+  } else {
+    await fs.rm(tempDir, { force: true, recursive: true });
+    await fs.mkdir(tempDir);
   }
+
   const outputDir = path.join(tempDir, "output");
 
   const testFilePaths: string[] = [];
