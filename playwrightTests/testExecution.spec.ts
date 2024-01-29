@@ -1,6 +1,5 @@
 // eslint-disable-next-line filenames/match-regex
 import { test } from "@playwright/test";
-import fs from "fs/promises";
 import { prepareTestRun, runTests } from "../src/debugtopus";
 import path from "path";
 
@@ -20,14 +19,6 @@ test.describe("test execution", () => {
       expect(false).toBeFalsy();
     });
   });`;
-
-  test.afterEach(async () => {
-    try {
-      await fs.rm("temp", { recursive: true });
-    } catch (error) {
-      // we don't care
-    }
-  });
 
   for (const codePerTest of [[testCode1], [testCode1, testCode2]]) {
     test(`it can execute playwright for '${codePerTest.length}' test(s)`, async () => {
