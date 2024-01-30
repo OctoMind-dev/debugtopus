@@ -78,9 +78,12 @@ export const prepareTestRun = async ({
 
   const tempDir = path.join(packageRootDir, "temp");
 
-  if (!existsSync(tempDir)) {
-    await fs.mkdir(tempDir);
+  if (existsSync(tempDir)) {
+    await fs.rm(tempDir, { force: true, recursive: true });
   }
+
+  await fs.mkdir(tempDir);
+
   const outputDir = path.join(tempDir, "output");
 
   const testFilePaths: string[] = [];

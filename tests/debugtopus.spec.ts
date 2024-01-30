@@ -6,7 +6,6 @@ import {
 } from "../src/debugtopus";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
-import fs from "fs/promises";
 
 jest.mock("fs", () => ({
   ...jest.requireActual("fs"),
@@ -14,8 +13,6 @@ jest.mock("fs", () => ({
 }));
 
 describe("debugtopus", () => {
-  const packageRootDir = path.join(__dirname, "..");
-  const tempDir = path.join(packageRootDir, "temp");
   const testCode1 = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
 
   test.describe("test description", () => {
@@ -33,14 +30,6 @@ describe("debugtopus", () => {
   });`;
 
   const url = "https://octomind.dev";
-
-  afterEach(async () => {
-    try {
-      await fs.rm(tempDir, { recursive: true });
-    } catch (error) {
-      // we don't care
-    }
-  });
 
   describe(prepareTestRun.name, () => {
     it.each([
@@ -86,6 +75,26 @@ describe("debugtopus", () => {
         expect(configFileContent).toEqual(getConfig(url, outputDir));
       },
     );
+
+    it("does not have an infinitely growing temp directory", async () => {
+      const { testDirectory: testDirectory1 } = await prepareTestRun({
+        url,
+        testCasesWithCode: [
+          { code: testCode1, id: "id1", description: "description1" },
+        ],
+      });
+
+      expect(readdirSync(testDirectory1)).toHaveLength(2);
+
+      const { testDirectory: testDirectory2 } = await prepareTestRun({
+        url,
+        testCasesWithCode: [
+          { code: testCode1, id: "id1", description: "description1" },
+        ],
+      });
+
+      expect(readdirSync(testDirectory2)).toHaveLength(2);
+    });
   });
 
   describe(getPackageRootLevel.name, () => {
