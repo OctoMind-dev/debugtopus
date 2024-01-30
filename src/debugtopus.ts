@@ -76,14 +76,13 @@ export const prepareTestRun = async ({
     packageRootDir = getPackageRootLevel(appDir);
   }
 
-  const tempDir = path.join(packageRootDir, `temp`);
+  const tempDir = path.join(packageRootDir, "temp");
 
-  if (!existsSync(tempDir)) {
-    await fs.mkdir(tempDir);
-  } else {
+  if (existsSync(tempDir)) {
     await fs.rm(tempDir, { force: true, recursive: true });
-    await fs.mkdir(tempDir);
   }
+
+  await fs.mkdir(tempDir);
 
   const outputDir = path.join(tempDir, "output");
 
