@@ -36,3 +36,17 @@ You can also use a specific version:
 ```shell
  npx --package @octomind/debugtopus@<some-version> debugtopus --id <test-case-id> --token <token> --url <local-url> --testTargetid <testTargetid>
 ```
+
+## Development
+
+### Dependencies
+
+We use [corepack](https://nodejs.org/api/corepack.html) and [pnpm](https://pnpm.io/) for our dependencies.
+
+Enable corepack to let it manage pnpm and its version for you:
+
+```shell
+corepack enable
+```
+
+Then any time you reference `pnpm` in your shell corepack will ensure the right version is installed.
