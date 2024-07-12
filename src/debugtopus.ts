@@ -15,6 +15,7 @@ export default defineConfig({
   use: {
     baseURL: "${url}",
   },
+  timeout: 600_000,
   outputDir: "${outputDir.replaceAll("\\", "\\\\")}",
   projects: [
     {

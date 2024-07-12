@@ -147,6 +147,12 @@ describe("debugtopus", () => {
 
       expect(config).toContain('outputDir: "some\\\\broken\\\\path\\\\1234"');
     });
+
+    it("should override the timeout", () => {
+      const config = getConfig("doesn't/matter", "./someDir");
+
+      expect(config).toContain("timeout: 600_00");
+    });
   });
 
   describe(createPlaywrightCommand.name, () => {
