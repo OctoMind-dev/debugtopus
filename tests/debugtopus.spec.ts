@@ -151,7 +151,13 @@ describe("debugtopus", () => {
     it("should override the timeout", () => {
       const config = getConfig("doesn't/matter", "./someDir");
 
-      expect(config).toContain("timeout: 600_00");
+      expect(config).toContain("timeout: 600_000");
+    });
+
+    it("should run a non-headless browser", () => {
+      const config = getConfig("doesn't/matter", "./someDir");
+
+      expect(config).toContain("headless: false");
     });
   });
 
