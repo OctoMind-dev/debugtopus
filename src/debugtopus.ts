@@ -13,6 +13,7 @@ import { defineConfig, devices } from "@playwright/test";
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig({
   use: {
+    headless: false,
     baseURL: "${url}",
   },
   timeout: 600_000,
