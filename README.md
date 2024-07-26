@@ -1,6 +1,10 @@
-# debugtopus  🐙💻
+# debugtopus  🐙 💻
 
-Tool to run your octomind tests against a local instance of your app.
+Hey! We use AI agent to auto-generate, host and run AI-generated end-to-end tests in standard Playwright code in the cloud. We work on both staging and production, as long as we can access the website. 
+
+Whether you want to make sure you didn't break a new build or use the e2e tests for synthetic monitoring, we offer a fast and easy way to QA your web app. Here some [info](https://www.octomind.dev/?utm_source=github&utm_medium=debugtopus&utm_campaign=rm) on that and more in the [docs](https://www.octomind.dev/docs?utm_source=github&utm_medium=debugtopus&utm_campaign=rm).
+
+We created Debugtopus to help you pinpoint the bug if a test goes red. It's a tool to run Octomind tests against a local instance of your app.
 
 ## Installation
 
