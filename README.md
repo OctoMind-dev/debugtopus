@@ -1,6 +1,9 @@
-# debugtopus  🐙💻
+# debugtopus  🐙 💻
 
-Tool to run your octomind tests against a local instance of your app.
+Debugtopus is a tool to run Octomind tests against the local instance of your app. Octomind tests are AI auto-generated, hosted and run end-to-end tests in standard Playwright code in the cloud. 
+
+Here's some more [info](https://www.octomind.dev/?utm_source=github&utm_medium=debugtopus&utm_campaign=rm) on octomind and more in the [docs](https://www.octomind.dev/docs?utm_source=github&utm_medium=debugtopus&utm_campaign=rm).
+
 
 ## Installation
 
