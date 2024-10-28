@@ -7,6 +7,7 @@ describe("octomind-api", () => {
   const testTargetId = "testTargetId";
   const token = "token";
   const octomindUrl = "https://app.octomind.dev";
+  const environmentId = "123-123-123";
 
   describe(getPlaywrightCode.name, () => {
     const testCode = "";
@@ -26,12 +27,16 @@ describe("octomind-api", () => {
         url,
         octomindUrl,
         testTargetId,
+        environmentId,
+      });
+
+      const searchParams = new URLSearchParams({
+        executionUrl: url,
+        environmentId,
       });
 
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
-          url,
-        )}`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -56,7 +61,7 @@ describe("octomind-api", () => {
           testTargetId,
         }),
       ).rejects.toMatchInlineSnapshot(
-        `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases/testId/code?executionUrl=https://thisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`,
+        `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases/testId/code?executionUrl=https%3A%2F%2FthisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`,
       );
     });
   });
@@ -101,12 +106,14 @@ describe("octomind-api", () => {
       jest.mocked(axios.get).mockRejectedValue(axiosError);
 
       await expect(
-  getTestCases({
-    token,
-    octomindUrl,
-    testTargetId
-  })
-).rejects.toMatchInlineSnapshot(`[Error: failed to get test-cases from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases: response body: '"Internal Server Error"' statusCode: 'undefined']`);
+        getTestCases({
+          token,
+          octomindUrl,
+          testTargetId,
+        }),
+      ).rejects.toMatchInlineSnapshot(
+        `[Error: failed to get test-cases from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases: response body: '"Internal Server Error"' statusCode: 'undefined']`,
+      );
     });
   });
 });

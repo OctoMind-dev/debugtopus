@@ -19,6 +19,7 @@ npm i @octomind/debugtopus
 * `-u, --url <local-url>` - an url of your app you want the tests to be run against
 ### Optional
 * `-i, --id <test-case-id>` - ID of the test case you want to run locally - if not provided will run all test cases in the specified target
+* `-e, --environmentId <environment-id>` - ID of the environment you want your test case to use - if not provided will run all test cases in default environment
 * `-o, --octomindUrl <octo-url>` - defaults to production app `app.octomind.dev`. Used by octoneers to test against different environments
 
 ## Usage
@@ -27,17 +28,17 @@ You should just add the url of the app you would like to run the test against:
 
 Running one test case:
 ```shell
-npx @octomind/debugtopus --id <test-case-id> --token <token> --url <local-url> --testTargetid <testTargetid>
+npx @octomind/debugtopus --id <testCaseId> --token <token> --url <local-url> --testTargetId <testTargetId> --environmentId <environmentId>
 ```
 
 Running all test cases in a test target:
 ```shell
-npx @octomind/debugtopus --token <token> --url <local-url> --testTargetid <testTargetid>
+npx @octomind/debugtopus --token <token> --url <local-url> --testTargetId <testTargetId> --environmentId <environmentId>
 ```
 
 You can also use a specific version:
 ```shell
- npx --package @octomind/debugtopus@<some-version> debugtopus --id <test-case-id> --token <token> --url <local-url> --testTargetid <testTargetid>
+ npx --package @octomind/debugtopus@<some-version> debugtopus --id <test-case-id> --token <token> --url <local-url> --testTargetid <testTargetid> --environmentId <environmentId>
 ```
 
 ## Development

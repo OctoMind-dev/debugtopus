@@ -6,16 +6,24 @@ export const getPlaywrightCode = async ({
   url,
   octomindUrl,
   testTargetId,
+  environmentId,
 }: {
   testCaseId: string;
   testTargetId: string;
   token: string;
   url: string;
   octomindUrl: string;
+  environmentId?: string;
 }): Promise<string> => {
-  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?executionUrl=${encodeURI(
-    url,
-  )}`;
+  const searchParams = new URLSearchParams();
+
+  searchParams.set("executionUrl", url);
+  if (environmentId) {
+    searchParams.set("environmentId", environmentId);
+  }
+
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`;
+
   try {
     const axiosResponse = await axios.get(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
