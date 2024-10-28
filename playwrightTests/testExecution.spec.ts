@@ -20,6 +20,16 @@ test.describe("test execution", () => {
     });
   });`;
 
+  const otpImportCode = `import otplib from "otplib";
+  import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
+
+  test.describe("test description", () => {
+    test("it should be able to run playwright", () => {
+      console.log(otplib);
+      expect(true).toBeTruthy();
+    });
+  });`;
+
   for (const codePerTest of [[testCode1], [testCode1, testCode2]]) {
     test(`it can execute playwright for '${codePerTest.length}' test(s)`, async () => {
       const packageRootDir = path.join(__dirname, "..");
@@ -37,12 +47,25 @@ test.describe("test execution", () => {
   }
 
   test("it can execute playwright from an arbitrary folder", async () => {
-    process.chdir("..");
     const packageRootDir = path.join(__dirname, "..");
 
     const preparationResults = await prepareTestRun({
       testCasesWithCode: [
         { code: testCode1, id: "id", description: "someDescription" },
+      ],
+      url: "https://codesphere.com/ide/signin?variant=dark",
+      packageRootDir,
+    });
+
+    await runTests({ ...preparationResults, runMode: "headless" });
+  });
+
+  test("it can import otplib in a test", async () => {
+    const packageRootDir = path.join(__dirname, "..");
+
+    const preparationResults = await prepareTestRun({
+      testCasesWithCode: [
+        { code: otpImportCode, id: "id", description: "someDescription" },
       ],
       url: "https://codesphere.com/ide/signin?variant=dark",
       packageRootDir,
