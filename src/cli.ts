@@ -8,6 +8,7 @@ export type DebugtopusOptions = {
   token: string;
   url: string;
   octomindUrl: string;
+  environmentId?: string;
 };
 
 export const runWithOptions = async (
@@ -18,6 +19,7 @@ export const runWithOptions = async (
     token: options.token,
     url: options.url,
     octomindUrl: options.octomindUrl,
+    environmentId: options.environmentId,
   };
 
   let testCasesWithCode: TestCaseWithCode[] = [];

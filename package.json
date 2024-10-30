@@ -1,6 +1,6 @@
 {
   "name": "@octomind/debugtopus",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Thin wrapper around playwright and the octomind api to run your automagically-maintained tests locally",
   "main": "./dist/index.js",
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
