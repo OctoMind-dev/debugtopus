@@ -28,17 +28,17 @@ You should just add the url of the app you would like to run the test against:
 
 Running one test case:
 ```shell
-npx @octomind/debugtopus --id <testCaseId> --token <token> --url <local-url> --testTargetId <testTargetId> --environmentId <environmentId>
+npx @octomind/debugtopus --id <testCaseId> --token <token> --url <localUrl> --testTargetId <testTargetId> --environmentId <environmentId>
 ```
 
 Running all test cases in a test target:
 ```shell
-npx @octomind/debugtopus --token <token> --url <local-url> --testTargetId <testTargetId> --environmentId <environmentId>
+npx @octomind/debugtopus --token <token> --url <localUrl> --testTargetId <testTargetId> --environmentId <environmentId>
 ```
 
 You can also use a specific version:
 ```shell
- npx --package @octomind/debugtopus@<some-version> debugtopus --id <test-case-id> --token <token> --url <local-url> --testTargetid <testTargetid> --environmentId <environmentId>
+ npx --package @octomind/debugtopus@<some-version> debugtopus --id <testCaseId> --token <token> --url <localUrl> --testTargetId <testTargetId> --environmentId <environmentId>
 ```
 
 ## Development
