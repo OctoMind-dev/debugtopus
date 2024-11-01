@@ -22,8 +22,8 @@ importers:
         version: 12.0.1
     devDependencies:
       '@tsconfig/node-lts':
-        specifier: ^20.1.0
-        version: 20.1.3
+        specifier: ^22.0.0
+        version: 22.0.0
       '@types/jest':
         specifier: ^29.5.1
         version: 29.5.14
@@ -623,8 +623,8 @@ packages:
     resolution: {integrity: sha512-OPwQlEdg40HAj5KNF8WW6q2KG4Z+cBCZb3m4ninfTZKaBmbIJodviQsDBoYMPHkOyJJMHnOJo5j2+LKDOhOACg==}
     deprecated: Use version 10.1.0. Version 10.2.0 has potential breaking issues
 
-  '@tsconfig/node-lts@20.1.3':
-    resolution: {integrity: sha512-m3b7EP2U+h5tNSpaBMfcTuHmHn04wrgRPQQrfKt75YIPq6kPs2153/KfPHdqkEWGx5pEBvS6rnvToT+yTtC1iw==}
+  '@tsconfig/node-lts@22.0.0':
+    resolution: {integrity: sha512-6y6CBFe0etz2xU1s0rGOj7pLsvbYXM9l/RNmBQOKI3S5DFrp1jigxx8uYupG5O6cCNXNlOE/1gquoQH01+kz5w==}
 
   '@tsconfig/node10@1.0.9':
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -3138,7 +3138,7 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.0
 
-  '@tsconfig/node-lts@20.1.3': {}
+  '@tsconfig/node-lts@22.0.0': {}
 
   '@tsconfig/node10@1.0.9': {}
 
