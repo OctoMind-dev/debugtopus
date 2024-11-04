@@ -55,7 +55,9 @@ export const runWithOptions = async (
   await runTests({ ...testRunPreparationResults, runMode: "ui" });
 };
 
-export const debugtopus = async (): Promise<void> => {
+export const debugtopus = async (
+  commandLine: string[] = process.argv,
+): Promise<void> => {
   const program = new Command();
 
   program
@@ -67,6 +69,10 @@ export const debugtopus = async (): Promise<void> => {
       "-i, --id <uuid>",
       "id of the test case you want to run, if not provided will run all test cases in the test target",
     )
+    .option(
+      "-e, --environmentId <uuid>",
+      "id of the environment you want to run against, if not provided will run all test cases against the default environment",
+    )
     .requiredOption("-u, --url <url>", "url the tests should run against")
     .requiredOption(
       "-tt, --testTargetId <uuid>",
@@ -77,7 +83,7 @@ export const debugtopus = async (): Promise<void> => {
       "base url of the octomind api",
       "https://app.octomind.dev",
     )
-    .parse(process.argv);
+    .parse(commandLine);
 
   await runWithOptions(program.opts<DebugtopusOptions>());
 };
