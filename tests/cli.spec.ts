@@ -1,10 +1,12 @@
 import { prepareTestRun } from "../src/debugtopus";
 import { createMockOptions, createMockTestPreparationResult } from "./mocks";
 import { getPlaywrightCode, getTestCases } from "../src/octomind-api";
-import { runWithOptions } from "../src/cli";
+import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
+import { Command } from "commander";
 
 jest.mock("../src/debugtopus");
 jest.mock("../src/octomind-api");
+jest.mock("commander");
 
 describe(runWithOptions.name, () => {
   const mockedCode = "code";
@@ -12,6 +14,15 @@ describe(runWithOptions.name, () => {
     { id: "id1", description: "description1" },
     { id: "id2", description: "description2" },
   ];
+
+  const requiredOptions: Required<DebugtopusOptions> = {
+    environmentId: "environmentId",
+    id: "testCaseId",
+    octomindUrl: "octomindUrl",
+    testTargetId: "testTargetId",
+    token: "token",
+    url: "https://url.com",
+  };
 
   beforeEach(() => {
     jest
@@ -55,6 +66,49 @@ describe(runWithOptions.name, () => {
           ...tc,
         })),
       }),
+    );
+  });
+
+  describe("commandline", () => {
+    let mockedOption: jest.Mock;
+    let mockedRequiredOption: jest.Mock;
+
+    beforeEach(() => {
+      mockedOption = jest.fn().mockReturnThis();
+      mockedRequiredOption = jest.fn().mockReturnThis();
+
+      jest.mocked(Command).mockReturnValue({
+        option: mockedOption,
+        requiredOption: mockedRequiredOption,
+        parse: jest.fn().mockReturnThis(),
+        opts: jest.fn().mockReturnValue(requiredOptions),
+      } as Partial<Command> as Command);
+    });
+
+    it.each(Object.entries(requiredOptions))(
+      "should include required option '%s' in the cli-api",
+      async (entry) => {
+        // const expectedCommandline = `--${option} ${optionValue}`;
+
+        await debugtopus(["npx", "@octomind/debugtopus", "--help"]);
+
+        const calls = [
+          ...mockedOption.mock.calls,
+          ...mockedRequiredOption.mock.calls,
+        ];
+
+        let expectedThirdArgument = undefined;
+
+        if (entry === "octomindUrl") {
+          expectedThirdArgument = expect.any(String);
+        }
+
+        expect(calls).toContainEqual([
+          expect.stringContaining(`--${entry}`),
+          expect.any(String),
+          expectedThirdArgument,
+        ]);
+      },
     );
   });
 });
