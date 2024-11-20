@@ -40,6 +40,32 @@ export const getPlaywrightCode = async ({
   }
 };
 
+export const getTestTarget = async ({
+  testTargetId,
+  token,
+  octomindUrl,
+}: {
+  testTargetId: string;
+  token: string;
+  octomindUrl: string;
+}): Promise<any> => {
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}`;
+  try {
+    const axiosResponse = await axios.get<[TestCase]>(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return axiosResponse.data;
+  } catch (error) {
+    const responseBody = (error as AxiosError).response?.data;
+    const responseCode = (error as AxiosError).response?.status;
+    throw new Error(
+      `failed to get test-target from ${endpoint}: response body: '${JSON.stringify(
+        responseBody,
+      )}' statusCode: '${JSON.stringify(responseCode)}'`,
+    );
+  }
+};
+
 export type TestCase = { id: string; description?: string };
 
 export const getTestCases = async ({

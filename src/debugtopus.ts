@@ -7,7 +7,19 @@ import fs from "fs/promises";
 import { ensureChromiumIsInstalled } from "./installation";
 import { TestCase } from "./octomind-api";
 
-export const getConfig = (url: string, outputDir: string) => `
+export type BasicAuth = { username: string; password: string };
+
+export type Environment = {
+  id: string;
+  basicAuth?: BasicAuth;
+  type: "DEFAULT" | "ADDITIONAL";
+};
+
+export const getConfig = (
+  url: string,
+  outputDir: string,
+  basicAuth?: BasicAuth,
+) => `
 import { defineConfig, devices } from "@playwright/test";
 
 // noinspection JSUnusedGlobalSymbols
@@ -15,6 +27,7 @@ export default defineConfig({
   use: {
     headless: false,
     baseURL: "${url}",
+    ${basicAuth ? `httpCredentials: ${JSON.stringify({ username: basicAuth.username, password: basicAuth.password })},` : ""}
   },
   timeout: 600_000,
   outputDir: "${outputDir.replaceAll("\\", "\\\\")}",
@@ -61,10 +74,12 @@ export type TestCaseWithCode = TestCase & { code: string };
 export const prepareTestRun = async ({
   url,
   testCasesWithCode,
+  basicAuth,
   packageRootDir,
 }: {
   url: string;
   testCasesWithCode: TestCaseWithCode[];
+  basicAuth?: BasicAuth;
   packageRootDir?: string;
 }): Promise<TestPreparationResult> => {
   if (!packageRootDir) {
@@ -102,7 +117,7 @@ export const prepareTestRun = async ({
 
   const fileNameUUID = randomUUID();
   const configFilePath = path.join(tempDir, `${fileNameUUID}.config.ts`);
-  writeFileSync(configFilePath, getConfig(url, outputDir));
+  writeFileSync(configFilePath, getConfig(url, outputDir, basicAuth));
 
   return {
     testFilePaths,
