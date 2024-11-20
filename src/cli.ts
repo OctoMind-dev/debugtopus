@@ -35,14 +35,16 @@ export const runWithOptions = async (
   });
 
   let basicAuth: BasicAuth | undefined;
-  if (options.environmentId) {
-    basicAuth = testTarget.environments.find(
-      (env: Environment) => env.id === options.environmentId,
-    )?.basicAuth;
-  } else {
-    basicAuth = testTarget.environments.find(
-      (env: Environment) => env.type === "DEFAULT",
-    )?.basicAuth;
+  if (testTarget.environments) {
+    if (options.environmentId) {
+      basicAuth = testTarget.environments.find(
+        (env: Environment) => env.id === options.environmentId,
+      )?.basicAuth;
+    } else {
+      basicAuth = testTarget.environments.find(
+        (env: Environment) => env.type === "DEFAULT",
+      )?.basicAuth;
+    }
   }
 
   let testCasesWithCode: TestCaseWithCode[] = [];
