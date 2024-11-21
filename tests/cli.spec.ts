@@ -56,6 +56,12 @@ describe(runWithOptions.name, () => {
 
     expect(prepareTestRun).toHaveBeenCalledWith(
       expect.objectContaining({
+        basicAuth: mockedTestTarget.environments[0].basicAuth,
+      }),
+    );
+
+    expect(prepareTestRun).toHaveBeenCalledWith(
+      expect.objectContaining({
         testCasesWithCode: [
           {
             id,
