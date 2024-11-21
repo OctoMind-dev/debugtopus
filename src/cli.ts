@@ -1,5 +1,11 @@
-import { getPlaywrightCode, getTestCases } from "./octomind-api";
-import { prepareTestRun, runTests, TestCaseWithCode } from "./debugtopus";
+import { getPlaywrightCode, getTestCases, getTestTarget } from "./octomind-api";
+import {
+  BasicAuth,
+  Environment,
+  prepareTestRun,
+  runTests,
+  TestCaseWithCode,
+} from "./debugtopus";
 import { Command } from "commander";
 
 export type DebugtopusOptions = {
@@ -21,6 +27,25 @@ export const runWithOptions = async (
     octomindUrl: options.octomindUrl,
     environmentId: options.environmentId,
   };
+
+  const testTarget = await getTestTarget({
+    testTargetId: options.testTargetId,
+    token: options.token,
+    octomindUrl: options.octomindUrl,
+  });
+
+  let basicAuth: BasicAuth | undefined;
+  if (testTarget && testTarget.environments) {
+    if (options.environmentId) {
+      basicAuth = testTarget.environments.find(
+        (env: Environment) => env.id === options.environmentId,
+      )?.basicAuth;
+    } else {
+      basicAuth = testTarget.environments.find(
+        (env: Environment) => env.type === "DEFAULT",
+      )?.basicAuth;
+    }
+  }
 
   let testCasesWithCode: TestCaseWithCode[] = [];
   if (options.id) {
@@ -50,6 +75,7 @@ export const runWithOptions = async (
   const testRunPreparationResults = await prepareTestRun({
     url: options.url,
     testCasesWithCode,
+    basicAuth,
   });
 
   await runTests({ ...testRunPreparationResults, runMode: "ui" });

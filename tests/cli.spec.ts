@@ -1,6 +1,6 @@
 import { prepareTestRun } from "../src/debugtopus";
 import { createMockOptions, createMockTestPreparationResult } from "./mocks";
-import { getPlaywrightCode, getTestCases } from "../src/octomind-api";
+import { getPlaywrightCode, getTestCases, getTestTarget } from "../src/octomind-api";
 import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
 import { Command } from "commander";
 
@@ -24,12 +24,26 @@ describe(runWithOptions.name, () => {
     url: "https://url.com",
   };
 
+  const mockedTestTarget = {
+    environments: [
+      {
+        id: "environmentId",
+        type: "DEFAULT",
+        basicAuth: {
+          username: "username",
+          password: "password",
+        },
+      },
+    ],
+  };
+
   beforeEach(() => {
     jest
       .mocked(prepareTestRun)
       .mockResolvedValue(createMockTestPreparationResult());
     jest.mocked(getPlaywrightCode).mockResolvedValue(mockedCode);
     jest.mocked(getTestCases).mockResolvedValue(mockedTestCases);
+    jest.mocked(getTestTarget).mockResolvedValue(mockedTestTarget);
   });
 
   it("correctly runs one test if id is included", async () => {
@@ -37,6 +51,12 @@ describe(runWithOptions.name, () => {
     await runWithOptions(
       createMockOptions({
         id,
+      }),
+    );
+
+    expect(prepareTestRun).toHaveBeenCalledWith(
+      expect.objectContaining({
+        basicAuth: mockedTestTarget.environments[0].basicAuth,
       }),
     );
 
