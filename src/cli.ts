@@ -35,7 +35,7 @@ export const runWithOptions = async (
   });
 
   let basicAuth: BasicAuth | undefined;
-  if (testTarget.environments) {
+  if (testTarget && testTarget.environments) {
     if (options.environmentId) {
       basicAuth = testTarget.environments.find(
         (env: Environment) => env.id === options.environmentId,
