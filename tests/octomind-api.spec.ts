@@ -90,6 +90,7 @@ describe("octomind-api", () => {
         `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases`,
         {
           headers: { Authorization: `Bearer ${token}` },
+          params: { filter: "{\"status\":\"ENABLED\"}" },
         },
       );
 

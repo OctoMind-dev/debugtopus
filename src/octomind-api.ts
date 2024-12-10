@@ -81,6 +81,7 @@ export const getTestCases = async ({
   try {
     const axiosResponse = await axios.get<[TestCase]>(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
+      params: { filter: JSON.stringify({ status: "ENABLED" }) },
     });
     return axiosResponse.data;
   } catch (error) {
