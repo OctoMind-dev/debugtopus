@@ -73,12 +73,11 @@ export type TestCaseWithCode = TestCase & { code: string };
 
 const getUniqueFilename = (tempDir: string, testCase: TestCaseWithCode) => {
   const fileNameUUID = randomUUID();
-  const name = testCase.description ? testCase.description.replaceAll(path.sep,'-') : testCase.id;
-  return path.join(
-    tempDir,
-    `${name}-${fileNameUUID}.spec.ts`,
-  );
-}
+  const name = testCase.description
+    ? testCase.description.replaceAll(path.sep, "-")
+    : testCase.id;
+  return path.join(tempDir, `${name}-${fileNameUUID}.spec.ts`);
+};
 
 export const prepareTestRun = async ({
   url,
