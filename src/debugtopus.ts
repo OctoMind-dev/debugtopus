@@ -71,6 +71,14 @@ export type TestPreparationResult = {
 
 export type TestCaseWithCode = TestCase & { code: string };
 
+const getUniqueFilename = (tempDir: string, testCase: TestCaseWithCode) => {
+  const fileNameUUID = randomUUID();
+  const name = testCase.description
+    ? testCase.description.replaceAll(path.sep, "-")
+    : testCase.id;
+  return path.join(tempDir, `${name}-${fileNameUUID}.spec.ts`);
+};
+
 export const prepareTestRun = async ({
   url,
   testCasesWithCode,
@@ -106,11 +114,7 @@ export const prepareTestRun = async ({
   const testFilePaths: string[] = [];
 
   for (const testCase of testCasesWithCode) {
-    const fileNameUUID = randomUUID();
-    const testFilePath = path.join(
-      tempDir,
-      `${testCase.description ?? testCase.id}-${fileNameUUID}.spec.ts`,
-    );
+    const testFilePath = getUniqueFilename(tempDir, testCase);
     writeFileSync(testFilePath, testCase.code);
     testFilePaths.push(testFilePath);
   }

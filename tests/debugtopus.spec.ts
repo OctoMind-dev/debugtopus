@@ -44,6 +44,12 @@ describe("debugtopus", () => {
           { code: testCode2, id: "id2", description: "description2" },
         ],
       },
+      {
+        testsToPrepare: [
+          { code: testCode1, id: "id1" },
+          { code: testCode2, id: "id2", description: "description/with/slash" },
+        ],
+      },
     ])(
       "generates the correct files for '$testsToPrepare.length' test case(s) ",
       async ({ testsToPrepare }) => {
@@ -61,7 +67,7 @@ describe("debugtopus", () => {
           testsToPrepare,
         ).entries()) {
           expect(testFilePaths[index]).toContain(
-            `${testCase.description ?? testCase.id}`,
+            `${testCase.description?.replaceAll(path.sep,"-") ?? testCase.id}`,
           );
           const testFileContent = readFileSync(testFilePaths[index], {
             encoding: "utf-8",
