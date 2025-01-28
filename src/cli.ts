@@ -101,7 +101,7 @@ export const debugtopus = async (
     )
     .requiredOption("-u, --url <url>", "url the tests should run against")
     .requiredOption(
-      "-tt, --testTargetId <uuid>",
+      "-a, --testTargetId <uuid>",
       "id of the test target of the test case",
     )
     .option(
