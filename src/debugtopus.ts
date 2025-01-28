@@ -18,6 +18,8 @@ export type Environment = {
 export const getConfig = (
   url: string,
   outputDir: string,
+  token: string,
+  proxy?: string,
   basicAuth?: BasicAuth,
 ) => `
 import { defineConfig, devices } from "@playwright/test";
@@ -28,6 +30,7 @@ export default defineConfig({
     headless: false,
     baseURL: "${url}",
     ${basicAuth ? `httpCredentials: ${JSON.stringify({ username: basicAuth.username, password: basicAuth.password })},` : ""}
+    ${proxy ? `proxy: { server: "http://${proxy}:3128" }, username: "octo", password: "${token}"` : ""}
   },
   timeout: 600_000,
   outputDir: "${outputDir.replaceAll("\\", "\\\\")}",
@@ -83,10 +86,14 @@ export const prepareTestRun = async ({
   url,
   testCasesWithCode,
   basicAuth,
+  token,
+  proxy,
   packageRootDir,
 }: {
   url: string;
   testCasesWithCode: TestCaseWithCode[];
+  token: string;
+  proxy?: string;
   basicAuth?: BasicAuth;
   packageRootDir?: string;
 }): Promise<TestPreparationResult> => {
@@ -121,7 +128,10 @@ export const prepareTestRun = async ({
 
   const fileNameUUID = randomUUID();
   const configFilePath = path.join(tempDir, `${fileNameUUID}.config.ts`);
-  writeFileSync(configFilePath, getConfig(url, outputDir, basicAuth));
+  writeFileSync(
+    configFilePath,
+    getConfig(url, outputDir, token, proxy, basicAuth),
+  );
 
   return {
     testFilePaths,

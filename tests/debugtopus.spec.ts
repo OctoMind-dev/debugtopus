@@ -30,6 +30,7 @@ describe("debugtopus", () => {
   });`;
 
   const url = "https://octomind.dev";
+  const token = "token";
 
   describe(prepareTestRun.name, () => {
     it.each([
@@ -57,6 +58,7 @@ describe("debugtopus", () => {
           await prepareTestRun({
             url,
             testCasesWithCode: testsToPrepare,
+            token,
           });
 
         expect(testFilePaths).toHaveLength(testsToPrepare.length);
@@ -78,7 +80,7 @@ describe("debugtopus", () => {
         const configFileContent = readFileSync(configFilePath, {
           encoding: "utf-8",
         });
-        expect(configFileContent).toEqual(getConfig(url, outputDir));
+        expect(configFileContent).toEqual(getConfig(url, outputDir, token));
       },
     );
 
@@ -88,6 +90,7 @@ describe("debugtopus", () => {
         testCasesWithCode: [
           { code: testCode1, id: "id1", description: "description1" },
         ],
+        token,
       });
 
       expect(readdirSync(testDirectory1)).toHaveLength(2);
@@ -97,6 +100,7 @@ describe("debugtopus", () => {
         testCasesWithCode: [
           { code: testCode1, id: "id1", description: "description1" },
         ],
+        token,
       });
 
       expect(readdirSync(testDirectory2)).toHaveLength(2);
@@ -149,21 +153,27 @@ describe("debugtopus", () => {
         "\\",
       );
 
-      const config = getConfig("doesn't/matter", brokenWindowsOutputPath);
+      const config = getConfig("doesn't/matter", brokenWindowsOutputPath, "token");
 
       expect(config).toContain('outputDir: "some\\\\broken\\\\path\\\\1234"');
     });
 
     it("should override the timeout", () => {
-      const config = getConfig("doesn't/matter", "./someDir");
+      const config = getConfig("doesn't/matter", "./someDir", "token");
 
       expect(config).toContain("timeout: 600_000");
     });
 
     it("should run a non-headless browser", () => {
-      const config = getConfig("doesn't/matter", "./someDir");
+      const config = getConfig("doesn't/matter", "./someDir", "token");
 
       expect(config).toContain("headless: false");
+    });
+
+    it("should use a proxy", () => {
+      const config = getConfig("doesn't/matter", "./someDir", "token", "proxy");
+
+      expect(config).toContain('server: "http://proxy:3128"');
     });
   });
 

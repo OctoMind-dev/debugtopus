@@ -4,6 +4,7 @@ import { prepareTestRun, runTests } from "../src/debugtopus";
 import path from "path";
 
 test.describe("test execution", () => {
+  const token = "token";
   const testCode1 = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
 
   test.describe("test description", () => {
@@ -38,6 +39,7 @@ test.describe("test execution", () => {
           id: `${index}`,
           code,
         })),
+        token,
         url: "https://codesphere.com/ide/signin?variant=dark",
         packageRootDir,
       });
@@ -53,6 +55,7 @@ test.describe("test execution", () => {
       testCasesWithCode: [
         { code: testCode1, id: "id", description: "someDescription" },
       ],
+      token,
       url: "https://codesphere.com/ide/signin?variant=dark",
       packageRootDir,
     });
@@ -67,6 +70,7 @@ test.describe("test execution", () => {
       testCasesWithCode: [
         { code: otpImportCode, id: "id", description: "someDescription" },
       ],
+      token,
       url: "https://codesphere.com/ide/signin?variant=dark",
       packageRootDir,
     });
