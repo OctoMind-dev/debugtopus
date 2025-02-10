@@ -22,6 +22,7 @@ describe(runWithOptions.name, () => {
     testTargetId: "testTargetId",
     token: "token",
     url: "https://url.com",
+    proxy: "proxy",
   };
 
   const mockedTestTarget = {
@@ -119,7 +120,7 @@ describe(runWithOptions.name, () => {
 
         let expectedThirdArgument = undefined;
 
-        if (entry === "octomindUrl") {
+        if (entry === "octomindUrl" || entry === "proxy") {
           expectedThirdArgument = expect.any(String);
         }
 

@@ -15,6 +15,7 @@ export type DebugtopusOptions = {
   url: string;
   octomindUrl: string;
   environmentId?: string;
+  proxy?: string;
 };
 
 export const runWithOptions = async (
@@ -26,6 +27,7 @@ export const runWithOptions = async (
     url: options.url,
     octomindUrl: options.octomindUrl,
     environmentId: options.environmentId,
+    proxy: options.proxy,
   };
 
   const testTarget = await getTestTarget({
@@ -75,7 +77,9 @@ export const runWithOptions = async (
   const testRunPreparationResults = await prepareTestRun({
     url: options.url,
     testCasesWithCode,
+    token: options.token,
     basicAuth,
+    proxy: options.proxy,
   });
 
   await runTests({ ...testRunPreparationResults, runMode: "ui" });
@@ -108,6 +112,11 @@ export const debugtopus = async (
       "-o, --octomindUrl <url>",
       "base url of the octomind api",
       "https://app.octomind.dev",
+    )
+    .option(
+      "-p, --proxy <proxy-host>",
+      "octomind proxy hostname to use",
+      "proxy-eu.octomind.dev",
     )
     .parse(commandLine);
 
