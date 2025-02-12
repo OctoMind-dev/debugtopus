@@ -16,13 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # sauce: https://github.com/nodejs/corepack/issues/612
+      - name: Set alternate npm integrity keys
+        run: |
+          echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+
       - name: Corepack enable
         shell: bash
         run: corepack enable
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
@@ -35,13 +40,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # sauce: https://github.com/nodejs/corepack/issues/612
+      - name: Set alternate npm integrity keys
+        run: |
+          echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+
       - name: Corepack enable
         shell: bash
         run: corepack enable
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
@@ -53,13 +63,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # sauce: https://github.com/nodejs/corepack/issues/612
+      - name: Set alternate npm integrity keys
+        run: |
+          echo COREPACK_INTEGRITY_KEYS="$(curl https://registry.npmjs.org/-/npm/v1/keys | jq -c '{npm: .keys}')" >> $GITHUB_ENV
+
       - name: Corepack enable
         shell: bash
         run: corepack enable
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
