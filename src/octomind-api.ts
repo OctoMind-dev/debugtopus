@@ -1,5 +1,38 @@
 import axios, { AxiosError } from "axios";
 
+export const getPlaywrightConfig = async ({
+  testTargetId,
+  token,
+  octomindUrl,
+  outputDir,
+  url,
+  environmentId,
+}: {
+  testTargetId: string;
+  token: string;
+  octomindUrl: string;
+  outputDir: string;
+  url: string;
+  environmentId: string;
+}): Promise<string> => {
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/config?url=${url}&outputDir=${outputDir}&environmentId=${environmentId}`;
+
+  try {
+    const axiosResponse = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return axiosResponse.data;
+  } catch (error) {
+    const responseBody = (error as AxiosError).response?.data;
+    const responseCode = (error as AxiosError).response?.status;
+    throw new Error(
+      `failed to get config from ${endpoint}: response body: '${JSON.stringify(
+        responseBody,
+      )}' statusCode: '${JSON.stringify(responseCode)}'`,
+    );
+  }
+};
+
 export const getPlaywrightCode = async ({
   testCaseId,
   token,

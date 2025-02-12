@@ -1,6 +1,31 @@
 import { DebugtopusOptions } from "../src/cli";
 import { TestPreparationResult } from "../src/debugtopus";
 
+export const mockedConfig = `
+import { defineConfig, devices } from "@playwright/test";
+
+// noinspection JSUnusedGlobalSymbols
+export default defineConfig({
+  use: {
+    headless: false,
+    baseURL: "https://codesphere.com/ide/signin?variant=dark",
+    
+  },
+  timeout: 600_000,
+  outputDir: "bar",
+  extraHTTPHeaders: {
+    "sec-ch-ua": '"Not)A;Brand";v="99"',
+    
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
+});
+`;
+
 export const createMockTestPreparationResult = (
   overrides?: Partial<TestPreparationResult>,
 ): TestPreparationResult => ({

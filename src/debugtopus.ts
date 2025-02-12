@@ -15,31 +15,6 @@ export type Environment = {
   type: "DEFAULT" | "ADDITIONAL";
 };
 
-export const getConfig = (
-  url: string,
-  outputDir: string,
-  basicAuth?: BasicAuth,
-) => `
-import { defineConfig, devices } from "@playwright/test";
-
-// noinspection JSUnusedGlobalSymbols
-export default defineConfig({
-  use: {
-    headless: false,
-    baseURL: "${url}",
-    ${basicAuth ? `httpCredentials: ${JSON.stringify({ username: basicAuth.username, password: basicAuth.password })},` : ""}
-  },
-  timeout: 600_000,
-  outputDir: "${outputDir.replaceAll("\\", "\\\\")}",
-  projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-  ],
-});
-`;
-
 export const getPackageRootLevel = (appDir: string): string => {
   let infiniteLoopPrevention = 5;
   let rootDir = appDir;
@@ -79,17 +54,9 @@ const getUniqueFilename = (tempDir: string, testCase: TestCaseWithCode) => {
   return path.join(tempDir, `${name}-${fileNameUUID}.spec.ts`);
 };
 
-export const prepareTestRun = async ({
-  url,
-  testCasesWithCode,
-  basicAuth,
-  packageRootDir,
-}: {
-  url: string;
-  testCasesWithCode: TestCaseWithCode[];
-  basicAuth?: BasicAuth;
-  packageRootDir?: string;
-}): Promise<TestPreparationResult> => {
+export const prepareDirectories = async (
+  packageRootDir?: string,
+): Promise<TestPreparationResult> => {
   if (!packageRootDir) {
     // at runtime, we are installed in an arbitrary npx cache folder,
     // we need to find the rootDir ourselves and cannot rely on paths relative to src
@@ -111,25 +78,33 @@ export const prepareTestRun = async ({
 
   const outputDir = path.join(tempDir, "output");
 
-  const testFilePaths: string[] = [];
-
-  for (const testCase of testCasesWithCode) {
-    const testFilePath = getUniqueFilename(tempDir, testCase);
-    writeFileSync(testFilePath, testCase.code);
-    testFilePaths.push(testFilePath);
-  }
-
   const fileNameUUID = randomUUID();
   const configFilePath = path.join(tempDir, `${fileNameUUID}.config.ts`);
-  writeFileSync(configFilePath, getConfig(url, outputDir, basicAuth));
-
   return {
-    testFilePaths,
+    outputDir,
     configFilePath,
     testDirectory: tempDir,
-    outputDir,
     packageRootDir,
+    testFilePaths: [],
   };
+};
+
+export const writeConfigAndTests = ({
+  testCasesWithCode,
+  config,
+  dirs,
+}: {
+  testCasesWithCode: TestCaseWithCode[];
+  config: string;
+  dirs: TestPreparationResult;
+}): void => {
+  for (const testCase of testCasesWithCode) {
+    const testFilePath = getUniqueFilename(dirs.testDirectory, testCase);
+    writeFileSync(testFilePath, testCase.code);
+    dirs.testFilePaths.push(testFilePath);
+  }
+
+  writeFileSync(dirs.configFilePath, config);
 };
 
 export const createPlaywrightCommand = ({

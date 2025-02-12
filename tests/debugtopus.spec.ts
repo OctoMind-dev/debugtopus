@@ -1,11 +1,12 @@
 import {
   createPlaywrightCommand,
-  getConfig,
   getPackageRootLevel,
-  prepareTestRun,
+  prepareDirectories,
+  writeConfigAndTests,
 } from "../src/debugtopus";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
+import { mockedConfig } from "./mocks";
 
 jest.mock("fs", () => ({
   ...jest.requireActual("fs"),
@@ -31,7 +32,7 @@ describe("debugtopus", () => {
 
   const url = "https://octomind.dev";
 
-  describe(prepareTestRun.name, () => {
+  describe("prepareTestRun.name", () => {
     it.each([
       {
         testsToPrepare: [
@@ -53,53 +54,54 @@ describe("debugtopus", () => {
     ])(
       "generates the correct files for '$testsToPrepare.length' test case(s) ",
       async ({ testsToPrepare }) => {
-        const { testFilePaths, testDirectory, configFilePath, outputDir } =
-          await prepareTestRun({
-            url,
-            testCasesWithCode: testsToPrepare,
-          });
+        const dirs = await prepareDirectories("/tmp");
+        writeConfigAndTests({
+          testCasesWithCode: testsToPrepare,
+          config: mockedConfig,
+          dirs
+        });
 
-        expect(testFilePaths).toHaveLength(testsToPrepare.length);
-        const dirContents = readdirSync(testDirectory);
+        expect(dirs.testFilePaths).toHaveLength(testsToPrepare.length);
+        const dirContents = readdirSync(dirs.testDirectory);
         expect(dirContents.length).toEqual(testsToPrepare.length + 1);
 
         for (const [index, testCase] of Object.values(
           testsToPrepare,
         ).entries()) {
-          expect(testFilePaths[index]).toContain(
+          expect(dirs.testFilePaths[index]).toContain(
             `${testCase.description?.replaceAll(path.sep,"-") ?? testCase.id}`,
           );
-          const testFileContent = readFileSync(testFilePaths[index], {
+          const testFileContent = readFileSync(dirs.testFilePaths[index], {
             encoding: "utf-8",
           });
           expect(testFileContent).toEqual(testCase.code);
         }
 
-        const configFileContent = readFileSync(configFilePath, {
-          encoding: "utf-8",
-        });
-        expect(configFileContent).toEqual(getConfig(url, outputDir));
       },
     );
 
     it("does not have an infinitely growing temp directory", async () => {
-      const { testDirectory: testDirectory1 } = await prepareTestRun({
-        url,
+      let dirs = await prepareDirectories();
+      writeConfigAndTests({
         testCasesWithCode: [
           { code: testCode1, id: "id1", description: "description1" },
         ],
+        config: mockedConfig,
+        dirs
       });
 
-      expect(readdirSync(testDirectory1)).toHaveLength(2);
+      expect(readdirSync(dirs.testDirectory)).toHaveLength(2);
 
-      const { testDirectory: testDirectory2 } = await prepareTestRun({
-        url,
+      dirs = await prepareDirectories();
+      writeConfigAndTests({
         testCasesWithCode: [
           { code: testCode1, id: "id1", description: "description1" },
         ],
+        config: mockedConfig,
+        dirs
       });
 
-      expect(readdirSync(testDirectory2)).toHaveLength(2);
+      expect(readdirSync(dirs.testDirectory)).toHaveLength(2);
     });
   });
 
@@ -140,31 +142,6 @@ describe("debugtopus", () => {
         );
       },
     );
-  });
-
-  describe(getConfig.name, () => {
-    it("should replace broken octal escape sequences for windows paths", () => {
-      const brokenWindowsOutputPath = "some/broken/path/1234".replaceAll(
-        "/",
-        "\\",
-      );
-
-      const config = getConfig("doesn't/matter", brokenWindowsOutputPath);
-
-      expect(config).toContain('outputDir: "some\\\\broken\\\\path\\\\1234"');
-    });
-
-    it("should override the timeout", () => {
-      const config = getConfig("doesn't/matter", "./someDir");
-
-      expect(config).toContain("timeout: 600_000");
-    });
-
-    it("should run a non-headless browser", () => {
-      const config = getConfig("doesn't/matter", "./someDir");
-
-      expect(config).toContain("headless: false");
-    });
   });
 
   describe(createPlaywrightCommand.name, () => {

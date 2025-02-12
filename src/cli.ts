@@ -1,10 +1,15 @@
-import { getPlaywrightCode, getTestCases, getTestTarget } from "./octomind-api";
 import {
-  BasicAuth,
+  getPlaywrightConfig,
+  getPlaywrightCode,
+  getTestCases,
+  getTestTarget,
+} from "./octomind-api";
+import {
   Environment,
-  prepareTestRun,
+  prepareDirectories,
   runTests,
   TestCaseWithCode,
+  writeConfigAndTests,
 } from "./debugtopus";
 import { Command } from "commander";
 
@@ -34,19 +39,6 @@ export const runWithOptions = async (
     octomindUrl: options.octomindUrl,
   });
 
-  let basicAuth: BasicAuth | undefined;
-  if (testTarget && testTarget.environments) {
-    if (options.environmentId) {
-      basicAuth = testTarget.environments.find(
-        (env: Environment) => env.id === options.environmentId,
-      )?.basicAuth;
-    } else {
-      basicAuth = testTarget.environments.find(
-        (env: Environment) => env.type === "DEFAULT",
-      )?.basicAuth;
-    }
-  }
-
   let testCasesWithCode: TestCaseWithCode[] = [];
   if (options.id) {
     testCasesWithCode = [
@@ -72,13 +64,28 @@ export const runWithOptions = async (
     );
   }
 
-  const testRunPreparationResults = await prepareTestRun({
+  const environmentIdForConfig = options.environmentId
+    ? options.environmentId
+    : testTarget.environments.find((env: Environment) => env.type === "DEFAULT")
+        .id;
+
+  const dirs = await prepareDirectories();
+
+  const config = await getPlaywrightConfig({
+    testTargetId: options.testTargetId,
+    token: options.token,
+    octomindUrl: options.octomindUrl,
     url: options.url,
-    testCasesWithCode,
-    basicAuth,
+    outputDir: dirs.outputDir,
+    environmentId: environmentIdForConfig!,
   });
 
-  await runTests({ ...testRunPreparationResults, runMode: "ui" });
+  writeConfigAndTests({
+    testCasesWithCode,
+    config,
+    dirs,
+  });
+  await runTests({ ...dirs, runMode: "ui" });
 };
 
 export const debugtopus = async (
