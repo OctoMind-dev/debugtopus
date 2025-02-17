@@ -96,7 +96,7 @@ export const writeConfigAndTests = ({
   config: string;
   dirs: TestDirectories;
 }): string[] => {
-  const testFilePaths : string[] = [];
+  const testFilePaths: string[] = [];
   for (const testCase of testCasesWithCode) {
     const testFilePath = getUniqueFilename(dirs.testDirectory, testCase);
     writeFileSync(testFilePath, testCase.code);
