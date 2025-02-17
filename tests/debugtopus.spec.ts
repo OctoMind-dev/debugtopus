@@ -6,6 +6,7 @@ import {
 } from "../src/debugtopus";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
+import fs from "fs";
 import { mockedConfig } from "./mocks";
 
 jest.mock("fs", () => ({
@@ -54,7 +55,7 @@ describe("debugtopus", () => {
     ])(
       "generates the correct files for '$testsToPrepare.length' test case(s) ",
       async ({ testsToPrepare }) => {
-        const dirs = await prepareDirectories("/tmp");
+        const dirs = await prepareDirectories(fs.mkdtemp("foo"));
         writeConfigAndTests({
           testCasesWithCode: testsToPrepare,
           config: mockedConfig,
