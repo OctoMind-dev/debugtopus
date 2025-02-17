@@ -6,7 +6,7 @@ import {
 } from "../src/debugtopus";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
-import fs from "fs";
+import { mkdtemp } from 'fs';
 import { mockedConfig } from "./mocks";
 
 jest.mock("fs", () => ({
@@ -55,24 +55,28 @@ describe("debugtopus", () => {
     ])(
       "generates the correct files for '$testsToPrepare.length' test case(s) ",
       async ({ testsToPrepare }) => {
-        const dirs = await prepareDirectories(fs.mkdtemp("foo"));
-        writeConfigAndTests({
+        let tempDir = "/tmp";
+        mkdtemp("foo", (err, folder)=>{
+          if( !err ) tempDir = folder;
+        });
+        const dirs = await prepareDirectories(tempDir);
+        const testFilePaths = writeConfigAndTests({
           testCasesWithCode: testsToPrepare,
           config: mockedConfig,
           dirs
         });
 
-        expect(dirs.testFilePaths).toHaveLength(testsToPrepare.length);
+        expect(testFilePaths).toHaveLength(testsToPrepare.length);
         const dirContents = readdirSync(dirs.testDirectory);
         expect(dirContents.length).toEqual(testsToPrepare.length + 1);
 
         for (const [index, testCase] of Object.values(
           testsToPrepare,
         ).entries()) {
-          expect(dirs.testFilePaths[index]).toContain(
+          expect(testFilePaths[index]).toContain(
             `${testCase.description?.replaceAll(path.sep,"-") ?? testCase.id}`,
           );
-          const testFileContent = readFileSync(dirs.testFilePaths[index], {
+          const testFileContent = readFileSync(testFilePaths[index], {
             encoding: "utf-8",
           });
           expect(testFileContent).toEqual(testCase.code);

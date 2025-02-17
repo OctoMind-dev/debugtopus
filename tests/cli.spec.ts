@@ -1,5 +1,5 @@
 import { prepareDirectories, writeConfigAndTests } from "../src/debugtopus";
-import { createMockOptions, createMockTestPreparationResult, mockedConfig } from "./mocks";
+import { createMockOptions, createMockTestDirectories, mockedConfig } from "./mocks";
 import { getPlaywrightCode, getPlaywrightConfig, getTestCases, getTestTarget } from "../src/octomind-api";
 import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
 import { Command } from "commander";
@@ -40,7 +40,7 @@ describe(runWithOptions.name, () => {
   beforeEach(() => {
     jest
       .mocked(prepareDirectories)
-      .mockResolvedValue(createMockTestPreparationResult());
+      .mockResolvedValue(createMockTestDirectories());
     jest.mocked(writeConfigAndTests);
     jest.mocked(getPlaywrightCode).mockResolvedValue(mockedCode);
     jest.mocked(getPlaywrightConfig).mockResolvedValue(mockedConfig);

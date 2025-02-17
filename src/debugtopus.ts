@@ -36,9 +36,8 @@ export const getPackageRootLevel = (appDir: string): string => {
   return rootDir;
 };
 
-export type TestPreparationResult = {
+export type TestDirectories = {
   configFilePath: string;
-  testFilePaths: string[];
   testDirectory: string;
   outputDir: string;
   packageRootDir: string;
@@ -56,7 +55,7 @@ const getUniqueFilename = (tempDir: string, testCase: TestCaseWithCode) => {
 
 export const prepareDirectories = async (
   packageRootDir?: string,
-): Promise<TestPreparationResult> => {
+): Promise<TestDirectories> => {
   if (!packageRootDir) {
     // at runtime, we are installed in an arbitrary npx cache folder,
     // we need to find the rootDir ourselves and cannot rely on paths relative to src
@@ -85,7 +84,6 @@ export const prepareDirectories = async (
     configFilePath,
     testDirectory: tempDir,
     packageRootDir,
-    testFilePaths: [],
   };
 };
 
@@ -96,15 +94,17 @@ export const writeConfigAndTests = ({
 }: {
   testCasesWithCode: TestCaseWithCode[];
   config: string;
-  dirs: TestPreparationResult;
-}): void => {
+  dirs: TestDirectories;
+}): string[] => {
+  const testFilePaths : string[] = [];
   for (const testCase of testCasesWithCode) {
     const testFilePath = getUniqueFilename(dirs.testDirectory, testCase);
     writeFileSync(testFilePath, testCase.code);
-    dirs.testFilePaths.push(testFilePath);
+    testFilePaths.push(testFilePath);
   }
 
   writeFileSync(dirs.configFilePath, config);
+  return testFilePaths;
 };
 
 export const createPlaywrightCommand = ({

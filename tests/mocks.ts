@@ -1,5 +1,5 @@
 import { DebugtopusOptions } from "../src/cli";
-import { TestPreparationResult } from "../src/debugtopus";
+import { TestDirectories } from "../src/debugtopus";
 
 export const mockedConfig = `
 import { defineConfig, devices } from "@playwright/test";
@@ -26,12 +26,11 @@ export default defineConfig({
 });
 `;
 
-export const createMockTestPreparationResult = (
-  overrides?: Partial<TestPreparationResult>,
-): TestPreparationResult => ({
+export const createMockTestDirectories = (
+  overrides?: Partial<TestDirectories>,
+): TestDirectories => ({
   configFilePath: "/some/path/config.ts",
   testDirectory: "/some/path",
-  testFilePaths: ["/some/path/test1.spec.ts", "/some/path/test2.spec.ts"],
   outputDir: "/some/path/output",
   packageRootDir: "/some/package/root/dir",
   ...overrides,
