@@ -33,7 +33,7 @@ describe("debugtopus", () => {
 
   const url = "https://octomind.dev";
 
-  describe("prepareTestRun.name", () => {
+  describe(prepareDirectories.name, () => {
     it.each([
       {
         testsToPrepare: [
