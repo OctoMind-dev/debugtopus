@@ -1,7 +1,8 @@
 // eslint-disable-next-line filenames/match-regex
 import { test } from "@playwright/test";
-import { prepareTestRun, runTests } from "../src/debugtopus";
+import { prepareDirectories, runTests, writeConfigAndTests } from "../src/debugtopus";
 import path from "path";
+import { mockedConfig } from "../tests/mocks";
 
 test.describe("test execution", () => {
   const testCode1 = `import { test, expect, chromium, Browser, type Locator } from "@playwright/test";
@@ -33,44 +34,45 @@ test.describe("test execution", () => {
   for (const codePerTest of [[testCode1], [testCode1, testCode2]]) {
     test(`it can execute playwright for '${codePerTest.length}' test(s)`, async () => {
       const packageRootDir = path.join(__dirname, "..");
-      const preparationResults = await prepareTestRun({
+      const dirs = await prepareDirectories(packageRootDir);
+      writeConfigAndTests({
         testCasesWithCode: codePerTest.map((code, index) => ({
           id: `${index}`,
           code,
         })),
-        url: "https://codesphere.com/ide/signin?variant=dark",
-        packageRootDir,
+        config: mockedConfig,
+        dirs,
       });
 
-      await runTests({ ...preparationResults, runMode: "headless" });
+      await runTests({ ...dirs, runMode: "headless" });
     });
   }
 
   test("it can execute playwright from an arbitrary folder", async () => {
     const packageRootDir = path.join(__dirname, "..");
-
-    const preparationResults = await prepareTestRun({
+    const dirs = await prepareDirectories(packageRootDir);
+    writeConfigAndTests({
       testCasesWithCode: [
         { code: testCode1, id: "id", description: "someDescription" },
       ],
-      url: "https://codesphere.com/ide/signin?variant=dark",
-      packageRootDir,
+      config: mockedConfig,
+      dirs,
     });
 
-    await runTests({ ...preparationResults, runMode: "headless" });
+    await runTests({ ...dirs, runMode: "headless" });
   });
 
   test("it can import otplib in a test", async () => {
     const packageRootDir = path.join(__dirname, "..");
-
-    const preparationResults = await prepareTestRun({
+    const dirs = await prepareDirectories(packageRootDir);
+    writeConfigAndTests({
       testCasesWithCode: [
         { code: otpImportCode, id: "id", description: "someDescription" },
       ],
-      url: "https://codesphere.com/ide/signin?variant=dark",
-      packageRootDir,
+      config: mockedConfig,
+      dirs,
     });
 
-    await runTests({ ...preparationResults, runMode: "headless" });
+    await runTests({ ...dirs, runMode: "headless" });
   });
 });
