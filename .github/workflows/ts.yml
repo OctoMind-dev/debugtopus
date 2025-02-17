@@ -18,11 +18,13 @@ jobs:
 
       - name: Corepack enable
         shell: bash
-        run: corepack enable
+        run: |
+          npm i -g corepack@latest
+          corepack enable
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
@@ -37,11 +39,14 @@ jobs:
 
       - name: Corepack enable
         shell: bash
-        run: corepack enable
+        run: |
+          npm i -g corepack@latest
+          corepack enable
+
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
@@ -55,11 +60,13 @@ jobs:
 
       - name: Corepack enable
         shell: bash
-        run: corepack enable
+        run: |
+          npm i -g corepack@latest
+          corepack enable
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - run: pnpm i
