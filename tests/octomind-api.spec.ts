@@ -1,5 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { getPlaywrightCode, getTestCases } from "../src/octomind-api";
+import { getPlaywrightCode, getPlaywrightConfig, getTestCases } from "../src/octomind-api";
+import { mockedConfig } from "./mocks";
 
 jest.mock("axios");
 
@@ -8,6 +9,32 @@ describe("octomind-api", () => {
   const token = "token";
   const octomindUrl = "https://app.octomind.dev";
   const environmentId = "123-123-123";
+
+  describe(getPlaywrightConfig.name, () => {
+    const url = "https://thisIsARealUrl.com";
+
+    beforeEach(() => {
+      jest.mocked(axios.get).mockResolvedValue({
+        data: { mockedConfig },
+      });
+    });
+    it("fetches the correct config with authentication", async () => {
+      await getPlaywrightConfig({
+        token,
+        url,
+        octomindUrl,
+        testTargetId,
+        environmentId,
+        outputDir: "/tmp/foo"
+      });
+      expect(axios.get).toHaveBeenCalledWith(
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=${url}&outputDir=/tmp/foo&environmentId=123-123-123`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+    });
+  });
 
   describe(getPlaywrightCode.name, () => {
     const testCode = "";

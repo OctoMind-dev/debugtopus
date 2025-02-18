@@ -1,6 +1,6 @@
-import { prepareTestRun } from "../src/debugtopus";
-import { createMockOptions, createMockTestPreparationResult } from "./mocks";
-import { getPlaywrightCode, getTestCases, getTestTarget } from "../src/octomind-api";
+import { prepareDirectories, writeConfigAndTests } from "../src/debugtopus";
+import { createMockOptions, createMockTestDirectories, mockedConfig } from "./mocks";
+import { getPlaywrightCode, getPlaywrightConfig, getTestCases, getTestTarget } from "../src/octomind-api";
 import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
 import { Command } from "commander";
 
@@ -39,9 +39,11 @@ describe(runWithOptions.name, () => {
 
   beforeEach(() => {
     jest
-      .mocked(prepareTestRun)
-      .mockResolvedValue(createMockTestPreparationResult());
+      .mocked(prepareDirectories)
+      .mockResolvedValue(createMockTestDirectories());
+    jest.mocked(writeConfigAndTests);
     jest.mocked(getPlaywrightCode).mockResolvedValue(mockedCode);
+    jest.mocked(getPlaywrightConfig).mockResolvedValue(mockedConfig);
     jest.mocked(getTestCases).mockResolvedValue(mockedTestCases);
     jest.mocked(getTestTarget).mockResolvedValue(mockedTestTarget);
   });
@@ -54,13 +56,12 @@ describe(runWithOptions.name, () => {
       }),
     );
 
-    expect(prepareTestRun).toHaveBeenCalledWith(
-      expect.objectContaining({
-        basicAuth: mockedTestTarget.environments[0].basicAuth,
-      }),
-    );
+    expect(prepareDirectories).toHaveBeenCalled();
+    expect(getPlaywrightConfig).toHaveBeenCalledWith(expect.objectContaining({
+      environmentId: mockedTestTarget.environments[0].id
+    })); 
 
-    expect(prepareTestRun).toHaveBeenCalledWith(
+    expect(writeConfigAndTests).toHaveBeenCalledWith(
       expect.objectContaining({
         testCasesWithCode: [
           {
@@ -78,8 +79,11 @@ describe(runWithOptions.name, () => {
         id: undefined,
       }),
     );
-
-    expect(prepareTestRun).toHaveBeenCalledWith(
+    expect(prepareDirectories).toHaveBeenCalled();
+    expect(getPlaywrightConfig).toHaveBeenCalledWith(expect.objectContaining({
+      environmentId: mockedTestTarget.environments[0].id
+    })); 
+    expect(writeConfigAndTests).toHaveBeenCalledWith(
       expect.objectContaining({
         testCasesWithCode: mockedTestCases.map((tc) => ({
           code: mockedCode,
