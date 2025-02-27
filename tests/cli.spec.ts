@@ -1,6 +1,19 @@
-import { prepareDirectories, writeConfigAndTests } from "../src/debugtopus";
-import { createMockOptions, createMockTestDirectories, mockedConfig } from "./mocks";
-import { getPlaywrightCode, getPlaywrightConfig, getTestCases, getTestTarget } from "../src/octomind-api";
+import {
+  prepareDirectories,
+  runTests,
+  writeConfigAndTests,
+} from "../src/debugtopus";
+import {
+  createMockOptions,
+  createMockTestDirectories,
+  mockedConfig,
+} from "./mocks";
+import {
+  getPlaywrightCode,
+  getPlaywrightConfig,
+  getTestCases,
+  getTestTarget,
+} from "../src/octomind-api";
 import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
 import { Command } from "commander";
 
@@ -22,6 +35,7 @@ describe(runWithOptions.name, () => {
     testTargetId: "testTargetId",
     token: "token",
     url: "https://url.com",
+    headless: false,
   };
 
   const mockedTestTarget = {
@@ -57,9 +71,11 @@ describe(runWithOptions.name, () => {
     );
 
     expect(prepareDirectories).toHaveBeenCalled();
-    expect(getPlaywrightConfig).toHaveBeenCalledWith(expect.objectContaining({
-      environmentId: mockedTestTarget.environments[0].id
-    })); 
+    expect(getPlaywrightConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environmentId: mockedTestTarget.environments[0].id,
+      }),
+    );
 
     expect(writeConfigAndTests).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -73,6 +89,27 @@ describe(runWithOptions.name, () => {
     );
   });
 
+  it("correctly runs the test headless if it is included", async () => {
+    await runWithOptions(
+      createMockOptions({
+        headless: true,
+      }),
+    );
+
+    expect(prepareDirectories).toHaveBeenCalled();
+    expect(getPlaywrightConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environmentId: mockedTestTarget.environments[0].id,
+      }),
+    );
+
+    expect(runTests).toHaveBeenCalledWith(
+      expect.objectContaining({
+        runMode: "headless",
+      }),
+    );
+  });
+
   it("correctly runs all tests if no id is included", async () => {
     await runWithOptions(
       createMockOptions({
@@ -80,9 +117,11 @@ describe(runWithOptions.name, () => {
       }),
     );
     expect(prepareDirectories).toHaveBeenCalled();
-    expect(getPlaywrightConfig).toHaveBeenCalledWith(expect.objectContaining({
-      environmentId: mockedTestTarget.environments[0].id
-    })); 
+    expect(getPlaywrightConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environmentId: mockedTestTarget.environments[0].id,
+      }),
+    );
     expect(writeConfigAndTests).toHaveBeenCalledWith(
       expect.objectContaining({
         testCasesWithCode: mockedTestCases.map((tc) => ({
