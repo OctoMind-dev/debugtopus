@@ -1,5 +1,9 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { getPlaywrightCode, getPlaywrightConfig, getTestCases } from "../src/octomind-api";
+import {
+  getPlaywrightCode,
+  getPlaywrightConfig,
+  getTestCases,
+} from "../src/octomind-api";
 import { mockedConfig } from "./mocks";
 
 jest.mock("axios");
@@ -25,10 +29,10 @@ describe("octomind-api", () => {
         octomindUrl,
         testTargetId,
         environmentId,
-        outputDir: "/tmp/foo"
+        outputDir: "/tmp/foo",
       });
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=${url}&outputDir=/tmp/foo&environmentId=123-123-123`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=${encodeURIComponent(url)}&outputDir=${encodeURIComponent("/tmp/foo")}&environmentId=123-123-123`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -117,7 +121,7 @@ describe("octomind-api", () => {
         `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { filter: "{\"status\":\"ENABLED\"}" },
+          params: { filter: '{"status":"ENABLED"}' },
         },
       );
 
