@@ -32,7 +32,7 @@ describe("octomind-api", () => {
         outputDir: "/tmp/foo",
       });
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=${encodeURIComponent(url)}&outputDir=${encodeURIComponent("/tmp/foo")}&environmentId=123-123-123`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=https%3A%2F%2FthisIsARealUrl.com&outputDir=%2Ftmp%2Ffoo&environmentId=123-123-123`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
