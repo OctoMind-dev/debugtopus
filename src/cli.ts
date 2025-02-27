@@ -79,6 +79,7 @@ export const runWithOptions = async (
     url: options.url,
     outputDir: dirs.outputDir,
     environmentId: environmentIdForConfig!,
+    headless: options.headless,
   });
 
   writeConfigAndTests({

@@ -7,6 +7,7 @@ export const getPlaywrightConfig = async ({
   outputDir,
   url,
   environmentId,
+  headless,
 }: {
   testTargetId: string;
   token: string;
@@ -14,8 +15,17 @@ export const getPlaywrightConfig = async ({
   outputDir: string;
   url: string;
   environmentId: string;
+  headless?: boolean;
 }): Promise<string> => {
-  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/config?url=${url}&outputDir=${outputDir}&environmentId=${environmentId}`;
+  const searchParams = new URLSearchParams();
+  searchParams.set("url", url);
+  searchParams.set("outputDir", outputDir);
+  searchParams.set("environmentId", environmentId);
+  if (headless) {
+    searchParams.set("headless", String(headless));
+  }
+
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/config?${searchParams.toString()}`;
 
   try {
     const axiosResponse = await axios.get(endpoint, {
