@@ -20,6 +20,7 @@ export type DebugtopusOptions = {
   url: string;
   octomindUrl: string;
   environmentId?: string;
+  headless?: boolean;
 };
 
 export const runWithOptions = async (
@@ -85,7 +86,7 @@ export const runWithOptions = async (
     config,
     dirs,
   });
-  await runTests({ ...dirs, runMode: "ui" });
+  await runTests({ ...dirs, runMode: options.headless ? "headless" : "ui" });
 };
 
 export const debugtopus = async (
@@ -115,6 +116,10 @@ export const debugtopus = async (
       "-o, --octomindUrl <url>",
       "base url of the octomind api",
       "https://app.octomind.dev",
+    )
+    .option(
+      "--headless",
+      "if we should run headless without the UI of playwright and the browser",
     )
     .parse(commandLine);
 
