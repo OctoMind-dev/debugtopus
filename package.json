@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@tsconfig/node-lts": "^22.0.0",
-    "@types/jest": "^29.5.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.1",
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/parser": "^8.6.0",
