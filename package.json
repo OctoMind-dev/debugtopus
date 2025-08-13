@@ -33,7 +33,7 @@
     "debugtopus": "./dist/index.js"
   },
   "dependencies": {
-    "@playwright/test": "1.53.2",
+    "@playwright/test": "1.54.2",
     "axios": "^1.4.0",
     "commander": "^14.0.0",
     "otplib": "^12.0.1"
