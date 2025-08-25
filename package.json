@@ -8,12 +8,7 @@
     "node": ">=20.0.0"
   },
   "type": "commonjs",
-  "files": [
-    "dist",
-    "src",
-    "README.md",
-    "package.json"
-  ],
+  "files": ["dist", "src", "README.md", "package.json"],
   "scripts": {
     "lint": "eslint src/**/*.ts --max-warnings=0",
     "build": "tsc --project tsconfig.build.json",

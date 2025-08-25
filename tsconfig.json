@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "types": [
-      "jest",
-      "node"
-    ],
+    "types": ["jest", "node"],
     "target": "ESNext",
     "module": "NodeNext",
     "outDir": "./dist",
@@ -12,13 +9,6 @@
     "noImplicitAny": true,
     "esModuleInterop": true
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "exclude": ["node_modules", "dist"],
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }
