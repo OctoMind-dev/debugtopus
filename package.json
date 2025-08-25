@@ -10,7 +10,7 @@
   "type": "commonjs",
   "files": ["dist", "src", "README.md", "package.json"],
   "scripts": {
-    "lint": "eslint src/**/*.ts --max-warnings=0",
+    "lint": "biome check",
     "build": "tsc --project tsconfig.build.json",
     "start": "npx tsx src/index.ts",
     "test": "jest --ci && pnpm test:playwright && pnpm test:cli",
