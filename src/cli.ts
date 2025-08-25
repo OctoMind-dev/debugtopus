@@ -1,9 +1,4 @@
-import {
-  getPlaywrightConfig,
-  getPlaywrightCode,
-  getTestCases,
-  getTestTarget,
-} from "./octomind-api";
+import { Command } from "commander";
 import {
   Environment,
   prepareDirectories,
@@ -11,7 +6,12 @@ import {
   TestCaseWithCode,
   writeConfigAndTests,
 } from "./debugtopus";
-import { Command } from "commander";
+import {
+  getPlaywrightCode,
+  getPlaywrightConfig,
+  getTestCases,
+  getTestTarget,
+} from "./octomind-api";
 
 export type DebugtopusOptions = {
   id?: string;
