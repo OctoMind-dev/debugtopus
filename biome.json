@@ -26,10 +26,13 @@
         "noAdjacentSpacesInRegex": "error",
         "noArguments": "error",
         "noCommaOperator": "error",
+        "noStaticOnlyClass": "error",
         "noExtraBooleanCast": "error",
         "noUselessEscapeInRegex": "error",
         "noUselessStringConcat": "error",
-        "useArrowFunction": "off"
+        "noUselessThisAlias": "error",
+        "noUselessTypeConstraint": "error",
+        "useArrowFunction": "error"
       },
       "correctness": {
         "noConstAssign": "error",
@@ -59,7 +62,13 @@
       },
       "style": {
         "noCommonJs": "error",
+        "noNamespace": "error",
+        "noNonNullAssertion": "error",
+        "useArrayLiterals": "error",
+        "useAsConstAssertion": "error",
         "useBlockStatements": "off",
+        "useLiteralEnumMembers": "error",
+        "useUnifiedTypeSignatures": "error",
         "useConsistentObjectDefinitions": "error",
         "useConst": "error",
         "useSingleVarDeclarator": "error",
@@ -71,7 +80,8 @@
         "noCatchAssign": "error",
         "noClassAssign": "error",
         "noCompareNegZero": "error",
-        "noConsole": "warn",
+        "noConfusingVoidType": "error",
+        "noConsole": "off",
         "noControlCharactersInRegex": "error",
         "noDebugger": "error",
         "noDoubleEquals": "error",
@@ -80,6 +90,8 @@
         "noDuplicateObjectKeys": "error",
         "noDuplicateParameters": "error",
         "noEmptyBlockStatements": "error",
+        "noExplicitAny": "error",
+        "noExtraNonNullAssertion": "error",
         "noFallthroughSwitchClause": "error",
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",
@@ -87,7 +99,10 @@
         "noRedeclare": "error",
         "noSparseArray": "error",
         "noUnsafeNegation": "error",
-        "noVar": "error"
+        "noUnsafeDeclarationMerging": "error",
+        "noVar": "error",
+        "useNamespaceKeyword": "error",
+        "noTsIgnore": "error"
       }
     },
     "includes": [
