@@ -50,7 +50,7 @@
         "noUnreachableSuper": "error",
         "noUnsafeFinally": "error",
         "noUnusedLabels": "error",
-        "noUnusedVariables": "warn",
+        "noUnusedVariables": "error",
         "useIsNan": "error",
         "useValidTypeof": "error",
         "useYield": "error"
