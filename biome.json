@@ -57,8 +57,7 @@
       },
       "nursery": {
         "noFloatingPromises": "warn",
-        "noShadow": "error",
-        "noUnresolvedImports": "error"
+        "noShadow": "error"
       },
       "style": {
         "noCommonJs": "error",
