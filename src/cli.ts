@@ -65,10 +65,17 @@ export const runWithOptions = async (
     );
   }
 
-  const environmentIdForConfig = options.environmentId
-    ? options.environmentId
-    : testTarget.environments.find((env: Environment) => env.type === "DEFAULT")
-        .id;
+  const defaultEnvironment = testTarget.environments.find(
+    (env: Environment) => env.type === "DEFAULT",
+  );
+
+  const environmentIdForConfig: string | undefined = options.environmentId ? options.environmentId :defaultEnvironment.id
+
+  if (!environmentIdForConfig) {
+    throw new Error(
+      `No environment ID was provided and a 'DEFAULT' environment id not set for test target '${options.testTargetId}'.`,
+    );
+  }
 
   const dirs = await prepareDirectories();
 
@@ -78,7 +85,7 @@ export const runWithOptions = async (
     octomindUrl: options.octomindUrl,
     url: options.url,
     outputDir: dirs.outputDir,
-    environmentId: environmentIdForConfig!,
+    environmentId: environmentIdForConfig,
     headless: options.headless,
   });
 
