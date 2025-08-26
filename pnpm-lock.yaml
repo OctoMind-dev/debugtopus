@@ -4,10 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@octomind/debugtopus': 'link:'
+
 importers:
 
   .:
     dependencies:
+      '@octomind/debugtopus':
+        specifier: 'link:'
+        version: 'link:'
       '@playwright/test':
         specifier: 1.55.0
         version: 1.55.0

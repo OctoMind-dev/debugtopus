@@ -39,6 +39,7 @@ describe(runWithOptions.name, () => {
   };
 
   const mockedTestTarget = {
+    testRailIntegration:null,
     environments: [
       {
         id: "environmentId",
@@ -47,6 +48,11 @@ describe(runWithOptions.name, () => {
           username: "username",
           password: "password",
         },
+        name:"str",
+        testTargetId:"someId",
+        discoveryUrl:"someUrl",
+        emailPrefix:"someEmail",
+        emailDomain:"someEmailDomain",
       },
     ],
   };

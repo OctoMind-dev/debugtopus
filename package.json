@@ -8,7 +8,12 @@
     "node": ">=20.0.0"
   },
   "type": "commonjs",
-  "files": ["dist", "src", "README.md", "package.json"],
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "package.json"
+  ],
   "scripts": {
     "lint": "biome check",
     "build": "tsc --project tsconfig.build.json",
@@ -28,6 +33,7 @@
     "debugtopus": "./dist/index.js"
   },
   "dependencies": {
+    "@octomind/debugtopus": "link:",
     "@playwright/test": "1.55.0",
     "axios": "1.11.0",
     "commander": "14.0.0",
