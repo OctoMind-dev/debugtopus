@@ -1,6 +1,5 @@
 import { Command } from "commander";
 import {
-  Environment,
   prepareDirectories,
   runTests,
   TestCaseWithCode,
@@ -65,11 +64,13 @@ export const runWithOptions = async (
     );
   }
 
-  const defaultEnvironment = testTarget.environments.find(
-    (env: Environment) => env.type === "DEFAULT",
+  const defaultEnvironment = testTarget?.environments.find(
+    (env) => env.type === "DEFAULT",
   );
 
-  const environmentIdForConfig: string | undefined = options.environmentId ? options.environmentId :defaultEnvironment.id
+  const environmentIdForConfig: string | undefined = options.environmentId
+    ? options.environmentId
+    : defaultEnvironment?.id;
 
   if (!environmentIdForConfig) {
     throw new Error(

@@ -82,6 +82,28 @@ export const getPlaywrightCode = async ({
     );
   }
 };
+//think about publishing types library
+interface TypedFullEnvironment {
+  id: string;
+  name: string;
+  testTargetId: string;
+  discoveryUrl: string;
+  emailPrefix: string;
+  emailDomain: string;
+  type: string;
+}
+interface TestRailIntegration {
+  id: string;
+  testTargetId: string;
+  apiKey: string;
+  projectId: string;
+  username: string;
+  domain: string;
+}
+interface TestTargetWithEnvironments {
+  testRailIntegration: TestRailIntegration | null;
+  environments: TypedFullEnvironment[];
+}
 
 export const getTestTarget = async ({
   testTargetId,
@@ -91,12 +113,15 @@ export const getTestTarget = async ({
   testTargetId: string;
   token: string;
   octomindUrl: string;
-}): Promise<any> => {
+}): Promise<TestTargetWithEnvironments | undefined> => {
   const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}`;
   try {
-    const axiosResponse = await axios.get<[TestCase]>(endpoint, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const axiosResponse = await axios.get<TestTargetWithEnvironments>(
+      endpoint,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
     return axiosResponse.data;
   } catch (error) {
     const responseBody = (error as AxiosError).response?.data;

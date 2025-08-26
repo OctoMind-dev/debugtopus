@@ -7,14 +7,6 @@ import { promisify } from "util";
 import { ensureChromiumIsInstalled } from "./installation";
 import { TestCase } from "./octomind-api";
 
-export type BasicAuth = { username: string; password: string };
-
-export type Environment = {
-  id: string;
-  basicAuth?: BasicAuth;
-  type: "DEFAULT" | "ADDITIONAL";
-};
-
 export const getPackageRootLevel = (appDir: string): string => {
   let infiniteLoopPrevention = 5;
   let rootDir = appDir;
