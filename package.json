@@ -15,7 +15,7 @@
     "package.json"
   ],
   "scripts": {
-    "lint": "eslint src/**/*.ts --max-warnings=0",
+    "lint": "biome check",
     "build": "tsc --project tsconfig.build.json",
     "start": "npx tsx src/index.ts",
     "test": "jest --ci && pnpm test:playwright && pnpm test:cli",
@@ -33,29 +33,22 @@
     "debugtopus": "./dist/index.js"
   },
   "dependencies": {
-    "@playwright/test": "1.53.2",
-    "axios": "^1.4.0",
-    "commander": "^14.0.0",
-    "otplib": "^12.0.1"
+    "@octomind/debugtopus": "link:",
+    "@playwright/test": "1.55.0",
+    "axios": "1.11.0",
+    "commander": "14.0.0",
+    "otplib": "12.0.1"
   },
   "devDependencies": {
-    "@tsconfig/node-lts": "^22.0.0",
-    "@types/jest": "^29.5.1",
-    "@types/node": "^24.0.1",
-    "@types/tmp": "^0.2.3",
-    "@typescript-eslint/parser": "^8.6.0",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-import-resolver-typescript": "^4.2.0",
-    "eslint-plugin-github": "^5.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^29.0.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "jest": "^30.0.0",
-    "prettier": "^3.0.1",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.4"
+    "@biomejs/biome": "2.2.2",
+    "@tsconfig/node-lts": "22.0.2",
+    "@types/jest": "29.5.14",
+    "@types/node": "24.3.0",
+    "@types/tmp": "0.2.6",
+    "jest": "30.0.5",
+    "ts-jest": "29.4.1",
+    "ts-node": "10.9.2",
+    "tsx": "4.20.4",
+    "typescript": "5.9.2"
   }
 }

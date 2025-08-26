@@ -1,8 +1,8 @@
 import { chromium } from "@playwright/test";
+import { exec } from "child_process";
 import { access } from "fs";
 import fs from "fs/promises";
 import { promisify } from "util";
-import { exec } from "child_process";
 
 export const ensureChromiumIsInstalled = async (
   packageRootDir: string,

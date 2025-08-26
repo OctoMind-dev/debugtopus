@@ -1,17 +1,16 @@
+import { Command } from "commander";
 import {
-  getPlaywrightConfig,
-  getPlaywrightCode,
-  getTestCases,
-  getTestTarget,
-} from "./octomind-api";
-import {
-  Environment,
   prepareDirectories,
   runTests,
   TestCaseWithCode,
   writeConfigAndTests,
 } from "./debugtopus";
-import { Command } from "commander";
+import {
+  getPlaywrightCode,
+  getPlaywrightConfig,
+  getTestCases,
+  getTestTarget,
+} from "./octomind-api";
 
 export type DebugtopusOptions = {
   id?: string;
@@ -65,10 +64,19 @@ export const runWithOptions = async (
     );
   }
 
-  const environmentIdForConfig = options.environmentId
+  const defaultEnvironment = testTarget?.environments.find(
+    (env) => env.type === "DEFAULT",
+  );
+
+  const environmentIdForConfig: string | undefined = options.environmentId
     ? options.environmentId
-    : testTarget.environments.find((env: Environment) => env.type === "DEFAULT")
-        .id;
+    : defaultEnvironment?.id;
+
+  if (!environmentIdForConfig) {
+    throw new Error(
+      `No environment ID was provided and a 'DEFAULT' environment id not set for test target '${options.testTargetId}'.`,
+    );
+  }
 
   const dirs = await prepareDirectories();
 
@@ -78,7 +86,7 @@ export const runWithOptions = async (
     octomindUrl: options.octomindUrl,
     url: options.url,
     outputDir: dirs.outputDir,
-    environmentId: environmentIdForConfig!,
+    environmentId: environmentIdForConfig,
     headless: options.headless,
   });
 
