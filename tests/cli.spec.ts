@@ -15,7 +15,7 @@ import {
   getTestTarget,
 } from "../src/octomind-api";
 import { debugtopus, DebugtopusOptions, runWithOptions } from "../src/cli";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 
 jest.mock("../src/debugtopus");
 jest.mock("../src/octomind-api");
@@ -35,6 +35,8 @@ describe(runWithOptions.name, () => {
     testTargetId: "testTargetId",
     token: "token",
     url: "https://url.com",
+    breakpoint: "DESKTOP",
+    browser: "CHROMIUM",
     headless: false,
   };
 
@@ -135,17 +137,25 @@ describe(runWithOptions.name, () => {
   describe("commandline", () => {
     let mockedOption: jest.Mock;
     let mockedRequiredOption: jest.Mock;
+    let mockedAddOption: jest.Mock;
 
     beforeEach(() => {
       mockedOption = jest.fn().mockReturnThis();
       mockedRequiredOption = jest.fn().mockReturnThis();
 
+      mockedAddOption = jest.fn().mockReturnThis();
       jest.mocked(Command).mockReturnValue({
         option: mockedOption,
         requiredOption: mockedRequiredOption,
         parse: jest.fn().mockReturnThis(),
         opts: jest.fn().mockReturnValue(requiredOptions),
+        addOption: mockedAddOption,
       } as Partial<Command> as Command);
+
+      jest.mocked(Option).mockReturnValue({
+        choices: jest.fn().mockReturnThis(),
+        default: jest.fn().mockReturnThis(),
+      } as Partial<Option> as Option);
     });
 
     it.each(Object.entries(requiredOptions))(
@@ -157,6 +167,7 @@ describe(runWithOptions.name, () => {
 
         const calls = [
           ...mockedOption.mock.calls,
+          ...jest.mocked(Option).mock.calls,
           ...mockedRequiredOption.mock.calls,
         ];
 

@@ -8,6 +8,8 @@ export const getPlaywrightConfig = async ({
   url,
   environmentId,
   headless,
+  browser,
+  breakpoint,
 }: {
   testTargetId: string;
   token: string;
@@ -16,11 +18,15 @@ export const getPlaywrightConfig = async ({
   url: string;
   environmentId: string;
   headless?: boolean;
+  browser: "CHROMIUM" | "FIREFOX" | "SAFARI";
+  breakpoint: "DESKTOP" | "TABLET" | "MOBILE";
 }): Promise<string> => {
   const searchParams = new URLSearchParams();
   searchParams.set("url", url);
   searchParams.set("outputDir", outputDir);
   searchParams.set("environmentId", environmentId);
+  searchParams.set("breakpoint", breakpoint);
+  searchParams.set("browser", browser);
   if (headless) {
     searchParams.set("headless", String(headless));
   }

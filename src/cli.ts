@@ -11,11 +11,13 @@ import {
   TestCaseWithCode,
   writeConfigAndTests,
 } from "./debugtopus";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 
 export type DebugtopusOptions = {
   id?: string;
   testTargetId: string;
+  breakpoint: "DESKTOP" | "TABLET" | "MOBILE";
+  browser: "CHROMIUM" | "FIREFOX" | "SAFARI";
   token: string;
   url: string;
   octomindUrl: string;
@@ -80,6 +82,8 @@ export const runWithOptions = async (
     outputDir: dirs.outputDir,
     environmentId: environmentIdForConfig!,
     headless: options.headless,
+    browser: options.browser,
+    breakpoint: options.breakpoint,
   });
 
   writeConfigAndTests({
@@ -121,6 +125,16 @@ export const debugtopus = async (
     .option(
       "--headless",
       "if we should run headless without the UI of playwright and the browser",
+    )
+    .addOption(
+      new Option("-b, --browser <browser>", "browser to use")
+        .choices(["CHROMIUM", "FIREFOX", "SAFARI"])
+        .default("CHROMIUM"),
+    )
+    .addOption(
+      new Option("-d, --breakpoint <breakpoint>", "breakpoint to use")
+        .choices(["DESKTOP", "TABLET", "MOBILE"])
+        .default("DESKTOP"),
     )
     .parse(commandLine);
 

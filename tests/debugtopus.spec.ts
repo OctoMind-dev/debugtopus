@@ -4,9 +4,10 @@ import {
   prepareDirectories,
   writeConfigAndTests,
 } from "../src/debugtopus";
+// noinspection ES6UnusedImports
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
-import { mkdtemp } from 'fs';
+import { mkdtemp } from "fs";
 import { mockedConfig } from "./mocks";
 
 jest.mock("fs", () => ({
@@ -56,14 +57,14 @@ describe("debugtopus", () => {
       "generates the correct files for '$testsToPrepare.length' test case(s) ",
       async ({ testsToPrepare }) => {
         let tempDir = "/tmp";
-        mkdtemp("foo", (err, folder)=>{
-          if( !err ) tempDir = folder;
+        mkdtemp("foo", (err, folder) => {
+          if (!err) tempDir = folder;
         });
         const dirs = await prepareDirectories(tempDir);
         const testFilePaths = writeConfigAndTests({
           testCasesWithCode: testsToPrepare,
           config: mockedConfig,
-          dirs
+          dirs,
         });
 
         expect(testFilePaths).toHaveLength(testsToPrepare.length);
@@ -74,14 +75,13 @@ describe("debugtopus", () => {
           testsToPrepare,
         ).entries()) {
           expect(testFilePaths[index]).toContain(
-            `${testCase.description?.replaceAll(path.sep,"-") ?? testCase.id}`,
+            `${testCase.description?.replaceAll(path.sep, "-") ?? testCase.id}`,
           );
           const testFileContent = readFileSync(testFilePaths[index], {
             encoding: "utf-8",
           });
           expect(testFileContent).toEqual(testCase.code);
         }
-
       },
     );
 
@@ -92,7 +92,7 @@ describe("debugtopus", () => {
           { code: testCode1, id: "id1", description: "description1" },
         ],
         config: mockedConfig,
-        dirs
+        dirs,
       });
 
       expect(readdirSync(dirs.testDirectory)).toHaveLength(2);
@@ -103,7 +103,7 @@ describe("debugtopus", () => {
           { code: testCode1, id: "id1", description: "description1" },
         ],
         config: mockedConfig,
-        dirs
+        dirs,
       });
 
       expect(readdirSync(dirs.testDirectory)).toHaveLength(2);
