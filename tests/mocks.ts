@@ -42,6 +42,8 @@ export const createMockOptions = (
   testTargetId: "testTargetId",
   token: "token",
   id: "testCaseId",
+  browser: "CHROMIUM",
+  breakpoint: "DESKTOP",
   octomindUrl: "https://app.octomind.dev",
   url: "http://localhost:3000",
   ...overrides,

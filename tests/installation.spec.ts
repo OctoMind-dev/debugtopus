@@ -1,4 +1,5 @@
 import { ensureChromiumIsInstalled } from "../src/installation";
+// noinspection ES6UnusedImports
 import { exec } from "child_process";
 import { access, NoParamCallback, PathLike } from "fs";
 
@@ -18,7 +19,7 @@ type AccessFunction = (
   // eslint-disable-next-line no-unused-vars
   mode: number | undefined,
   // eslint-disable-next-line no-unused-vars
-  callback: NoParamCallback
+  callback: NoParamCallback,
 ) => void;
 
 describe("random describe", () => {
@@ -40,7 +41,7 @@ describe("random describe", () => {
       {
         cwd: "randomAssCwd",
       },
-      expect.anything()
+      expect.anything(),
     );
   });
 
