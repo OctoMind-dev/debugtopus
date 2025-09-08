@@ -30,9 +30,11 @@ describe("octomind-api", () => {
         testTargetId,
         environmentId,
         outputDir: "/tmp/foo",
+        breakpoint: "DESKTOP",
+        browser: "CHROMIUM",
       });
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=https%3A%2F%2FthisIsARealUrl.com&outputDir=%2Ftmp%2Ffoo&environmentId=123-123-123`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=https%3A%2F%2FthisIsARealUrl.com&outputDir=%2Ftmp%2Ffoo&environmentId=123-123-123&breakpoint=DESKTOP&browser=CHROMIUM`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
