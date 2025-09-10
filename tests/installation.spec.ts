@@ -1,9 +1,11 @@
-import { ensureChromiumIsInstalled } from "../src/installation";
+import { ensureBrowsersAreInstalled } from "../src/installation";
 // noinspection ES6UnusedImports
 import { exec } from "child_process";
 import { access, NoParamCallback, PathLike } from "fs";
+import fs from "fs/promises";
+import fsPromises from "fs/promises";
 
-jest.mock("fs");
+jest.mock("fs/promises");
 jest.mock("child_process", () => {
   return {
     ...jest.requireActual("child_process"),
@@ -13,31 +15,17 @@ jest.mock("child_process", () => {
   };
 });
 
-type AccessFunction = (
-  // eslint-disable-next-line no-unused-vars
-  path: PathLike,
-  // eslint-disable-next-line no-unused-vars
-  mode: number | undefined,
-  // eslint-disable-next-line no-unused-vars
-  callback: NoParamCallback,
-) => void;
-
 describe("random describe", () => {
-  beforeEach(() => {
-    jest.mocked(exec).mockClear();
-  });
   it("tries to install browsers if they are missing", async () => {
-    jest
-      .mocked<AccessFunction>(access)
-      .mockImplementation(async (_, __, callback) => {
-        // eslint-disable-next-line no-undef
-        await callback({ code: "ENOENT" } as NodeJS.ErrnoException);
-      });
+    jest.mocked(fsPromises.access).mockImplementation(async () => {
+      const error = new Error("ENOENT");
+      throw error;
+    });
 
-    await ensureChromiumIsInstalled("randomAssCwd");
+    await ensureBrowsersAreInstalled("randomAssCwd");
 
     expect(exec).toHaveBeenCalledWith(
-      "npx playwright install chromium",
+      "npx playwright install",
       {
         cwd: "randomAssCwd",
       },
@@ -45,27 +33,11 @@ describe("random describe", () => {
     );
   });
 
-  it("resolves browsers already installs", async () => {
-    jest
-      .mocked<AccessFunction>(access)
-      .mockImplementation(async (_, __, callback) => {
-        await callback(null);
-      });
+  it("resolves if browsers already installs", async () => {
+    jest.mocked(fsPromises.access).mockResolvedValue(undefined);
 
-    await ensureChromiumIsInstalled("whatever");
+    await ensureBrowsersAreInstalled("whatever");
 
     expect(exec).toHaveBeenCalledTimes(0);
-  });
-
-  it("rejects if error is not ENOENT", async () => {
-    // eslint-disable-next-line no-undef
-    const aError = { code: "notENOENT" } as NodeJS.ErrnoException;
-    jest
-      .mocked<AccessFunction>(access)
-      .mockImplementation(async (_, __, callback) => {
-        await callback(aError);
-      });
-
-    await expect(ensureChromiumIsInstalled("whatever")).rejects.toEqual(aError);
   });
 });

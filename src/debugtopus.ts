@@ -4,7 +4,7 @@ import { exec } from "child_process";
 import { randomUUID } from "crypto";
 import path, { dirname } from "path";
 import fs from "fs/promises";
-import { ensureChromiumIsInstalled } from "./installation";
+import { ensureBrowsersAreInstalled } from "./installation";
 import { TestCase } from "./octomind-api";
 
 export type BasicAuth = { username: string; password: string };
@@ -132,7 +132,7 @@ export const runTests = async ({
   packageRootDir: string;
   runMode: "ui" | "headless";
 }): Promise<void> => {
-  await ensureChromiumIsInstalled(packageRootDir);
+  await ensureBrowsersAreInstalled(packageRootDir);
 
   let command = createPlaywrightCommand({ configFilePath, testDirectory });
 
