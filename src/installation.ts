@@ -1,44 +1,34 @@
-import { chromium } from "@playwright/test";
-import { access } from "fs";
-import fs from "fs/promises";
+import { webkit, chromium, firefox } from "@playwright/test";
+import fsPromises from "fs/promises";
 import { promisify } from "util";
 import { exec } from "child_process";
 
-export const ensureChromiumIsInstalled = async (
+export const ensureBrowsersAreInstalled = async (
   packageRootDir: string,
 ): Promise<void> => {
-  const file = chromium.executablePath();
+  const chromiumPath = chromium.executablePath();
+  const safariPath = webkit.executablePath();
+  const firefoxPath = firefox.executablePath();
 
-  await new Promise<void>((resolve, reject) => {
-    access(file, fs.constants.X_OK, async (error) => {
-      if (!error) {
-        resolve();
-        return;
-      }
-      if (error.code !== "ENOENT") {
-        reject(error);
-        return;
-      }
-      // eslint-disable-next-line no-console
-      console.log(
-        "Couldn't find any chromium binary, executing 'npx playwright install chromium'",
-      );
+  const accessed = await Promise.allSettled([
+    fsPromises.access(chromiumPath),
+    fsPromises.access(safariPath),
+    fsPromises.access(firefoxPath),
+  ]);
 
-      const playwrightInstallExecution = promisify(exec)(
-        "npx playwright install chromium",
-        {
-          cwd: packageRootDir,
-        },
-      );
+  if (accessed.every((a) => a.status === "fulfilled")) {
+    console.log(accessed, chromiumPath, safariPath, firefoxPath);
+    return;
+  }
 
-      playwrightInstallExecution.child?.stdout?.on("data", (data) =>
-        // eslint-disable-next-line no-console
-        console.log(data),
-      );
-
-      await playwrightInstallExecution;
-
-      resolve();
-    });
+  const playwrightInstallExecution = promisify(exec)("npx playwright install", {
+    cwd: packageRootDir,
   });
+
+  playwrightInstallExecution.child?.stdout?.on("data", (data) =>
+    // eslint-disable-next-line no-console
+    console.log(data),
+  );
+
+  await playwrightInstallExecution;
 };
