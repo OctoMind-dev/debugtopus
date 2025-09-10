@@ -17,7 +17,6 @@ export const ensureBrowsersAreInstalled = async (
   ]);
 
   if (accessed.every((a) => a.status === "fulfilled")) {
-    console.log(accessed, chromiumPath, safariPath, firefoxPath);
     return;
   }
 
