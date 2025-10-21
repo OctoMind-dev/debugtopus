@@ -1,8 +1,6 @@
 import { ensureBrowsersAreInstalled } from "../src/installation";
 // noinspection ES6UnusedImports
 import { exec } from "child_process";
-import { access, NoParamCallback, PathLike } from "fs";
-import fs from "fs/promises";
 import fsPromises from "fs/promises";
 
 jest.mock("fs/promises");

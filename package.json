@@ -1,11 +1,11 @@
 {
   "name": "@octomind/debugtopus",
-  "version": "3.9.0",
+  "version": "3.10.0",
   "description": "Thin wrapper around playwright and the octomind api to run your automagically-maintained tests locally",
   "main": "./dist/index.js",
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "type": "commonjs",
   "files": [
@@ -54,7 +54,6 @@
     "jest": "^30.0.0",
     "prettier": "^3.0.1",
     "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
     "tsx": "^4.0.0",
     "typescript": "^5.0.4"
   }
