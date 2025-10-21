@@ -17,9 +17,9 @@
   "scripts": {
     "lint": "eslint src/**/*.ts --max-warnings=0",
     "build": "tsc --project tsconfig.build.json",
-    "start": "npx tsx src/index.ts",
+    "start": "tsx src/index.ts",
     "test": "jest --ci && pnpm test:playwright && pnpm test:cli",
-    "test:playwright": "npx playwright test",
+    "test:playwright": "playwright test --debug",
     "test:cli": "pnpm build && pnpm link . && debugtopus -h",
     "test:watch": "jest --watch"
   },

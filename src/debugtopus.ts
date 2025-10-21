@@ -141,8 +141,7 @@ export const runTests = async ({
   }
 
   // eslint-disable-next-line no-console
-  console.log(`executing command : '${command}'`);
-
+  console.log(`executing command : '${command}', ${packageRootDir}`);
   const { stderr } = await promisify(exec)(command, {
     cwd: packageRootDir,
   });
