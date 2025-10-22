@@ -31,7 +31,7 @@ export const getPlaywrightConfig = async ({
     searchParams.set("headless", String(headless));
   }
 
-  const endpoint = `${octomindUrl}/api/bearer/v3/test-targets/${testTargetId}/config?${searchParams.toString()}`;
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/config?${searchParams.toString()}`;
 
   try {
     const axiosResponse = await axios.get(endpoint, {
@@ -71,7 +71,7 @@ export const getPlaywrightCode = async ({
     searchParams.set("environmentId", environmentId);
   }
 
-  const endpoint = `${octomindUrl}/api/bearer/v3/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`;
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`;
 
   try {
     const axiosResponse = await axios.get(endpoint, {
@@ -98,7 +98,7 @@ export const getTestTarget = async ({
   token: string;
   octomindUrl: string;
 }): Promise<any> => {
-  const endpoint = `${octomindUrl}/api/bearer/v3/test-targets/${testTargetId}`;
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}`;
   try {
     const axiosResponse = await axios.get<[TestCase]>(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
@@ -126,7 +126,7 @@ export const getTestCases = async ({
   token: string;
   octomindUrl: string;
 }): Promise<TestCase[]> => {
-  const endpoint = `${octomindUrl}/api/bearer/v3/test-targets/${testTargetId}/test-cases`;
+  const endpoint = `${octomindUrl}/api/bearer/v1/test-targets/${testTargetId}/test-cases`;
   try {
     const axiosResponse = await axios.get<[TestCase]>(endpoint, {
       headers: { Authorization: `Bearer ${token}` },

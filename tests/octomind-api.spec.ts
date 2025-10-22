@@ -34,7 +34,7 @@ describe("octomind-api", () => {
         browser: "CHROMIUM",
       });
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v3/test-targets/${testTargetId}/config?url=https%3A%2F%2FthisIsARealUrl.com&outputDir=%2Ftmp%2Ffoo&environmentId=123-123-123&breakpoint=DESKTOP&browser=CHROMIUM`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/config?url=https%3A%2F%2FthisIsARealUrl.com&outputDir=%2Ftmp%2Ffoo&environmentId=123-123-123&breakpoint=DESKTOP&browser=CHROMIUM`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -69,7 +69,7 @@ describe("octomind-api", () => {
       });
 
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v3/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases/${testCaseId}/code?${searchParams.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -94,7 +94,7 @@ describe("octomind-api", () => {
           testTargetId,
         }),
       ).rejects.toMatchInlineSnapshot(
-        `[Error: failed to get code from https://app.octomind.dev/api/bearer/v3/test-targets/testTargetId/test-cases/testId/code?executionUrl=https%3A%2F%2FthisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`,
+        `[Error: failed to get code from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases/testId/code?executionUrl=https%3A%2F%2FthisIsARealUrl.com: response body: '"Internal Server Error"' statusCode: 'undefined']`,
       );
     });
   });
@@ -120,7 +120,7 @@ describe("octomind-api", () => {
       });
 
       expect(axios.get).toHaveBeenCalledWith(
-        `https://app.octomind.dev/api/bearer/v3/test-targets/${testTargetId}/test-cases`,
+        `https://app.octomind.dev/api/bearer/v1/test-targets/${testTargetId}/test-cases`,
         {
           headers: { Authorization: `Bearer ${token}` },
           params: { filter: '{"status":"ENABLED"}' },
@@ -146,7 +146,7 @@ describe("octomind-api", () => {
           testTargetId,
         }),
       ).rejects.toMatchInlineSnapshot(
-        `[Error: failed to get test-cases from https://app.octomind.dev/api/bearer/v3/test-targets/testTargetId/test-cases: response body: '"Internal Server Error"' statusCode: 'undefined']`,
+        `[Error: failed to get test-cases from https://app.octomind.dev/api/bearer/v1/test-targets/testTargetId/test-cases: response body: '"Internal Server Error"' statusCode: 'undefined']`,
       );
     });
   });
